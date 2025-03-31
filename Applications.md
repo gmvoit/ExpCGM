@@ -10,3 +10,5 @@ This section of the **ExpCGM** website will eventually present applications fram
 
 {: .warning}
 There are not yet any applications presented in this section of the website.
+
+No applications at all
