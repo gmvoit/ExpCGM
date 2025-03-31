@@ -6,10 +6,6 @@ nav_exclude: true
 
 # Notebook For Testing Python 
 
-There is not yet a notebook featured here
-
-    Four Spaces
-
 No spaces
 
 ```python
