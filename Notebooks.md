@@ -12,3 +12,8 @@ This section of the **ExpCGM** website will eventually present notebooks that pr
 There are not yet any notebooks in this section of the website.
 
 No notebooks at all
+
+```Python
+# What about Python code?
+import np as numpy
+```
