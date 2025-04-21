@@ -1,3 +1,9 @@
+---
+title: Doruk/Jazzmin Notebook
+layout: default
+nav_exclude: true
+---
+
 This notebook implements the ExpCGM framework to relate the atmosphere's radius and mean specific energy under various assumptions about the pressure profile and the gravitational potential.
 
 
