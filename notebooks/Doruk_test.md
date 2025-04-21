@@ -24,6 +24,8 @@ nav_exclude: true
    </script>
 </head>
 
+# Doruk/Jazzmin Notebook
+
 This notebook implements the ExpCGM framework to relate the atmosphere's radius and mean specific energy under various assumptions about the pressure profile and the gravitational potential.
 
 
