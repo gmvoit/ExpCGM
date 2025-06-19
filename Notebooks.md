@@ -9,7 +9,10 @@ nav_order: 5
 This section of the **ExpCGM** website presents notebooks contributed by the framework's user community. They illustrate how the framework can be used and provide Python code that others can download and modify. Please remember to acknowledge the authors of these notebooks in any research publications that build upon their work.
 
 {: .warning}
-There are not yet any notebooks in this section of the website.
+The notebooks currently in this section of the website are prototypes that may still be further corrected and refined.
 
-No notebooks at all
+## MSU Undergraduate Notebooks
 
+These notebooks illustrating the Essential elements of the framework were developed by MSU students Doruk Yaldiz and Jazzmin Partridge:
+
+[Doruk_test](https://github.com/gmvoit/ExpCGM/edit/main/notebooks/Doruk_test.md) 
