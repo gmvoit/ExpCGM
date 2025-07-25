@@ -16,3 +16,7 @@ The notebooks currently in this section of the website are prototypes that may s
 These notebooks illustrating the Essential elements of the framework were developed by MSU students Doruk Yaldiz and Jazzmin Partridge:
 
 [Doruk_test](https://github.com/gmvoit/ExpCGM/edit/main/notebooks/Doruk_test.md) 
+
+[Essentials](descriptions/Essentials)
+
+[OtherTest](notebooks/Notebook_1_files/Doruk_test.md)
