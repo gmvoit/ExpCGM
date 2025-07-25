@@ -18,4 +18,6 @@ nav_order: 7
 * Chris Carr
 * Megan Donahue
 * Drummond Fielding
+* Jazzmin Partridge
 * Rachel Somerville
+* Doruk Yaldiz
