@@ -21,6 +21,10 @@ These notebooks illustrating the Essential elements of the framework were develo
 
 [ExpCGM/Essentials](/ExpCGM/descriptions/Essentials)
 
-[OtherTest](notebooks/Notebook_1_files/Doruk_test)
+[DorukOthertest](notebooks/Doruk_test)
 
-[Notebook1](Notebook_1_files/Notebook1)
+[ExpCGM/Doruk_test](/ExpCGM/notebooks/Doruk_test)
+
+[Notebook1](Notebook1)
+
+[ExpCGM/Notebook1](/ExpCGM/notebooks/Notebook1)
