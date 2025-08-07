@@ -96,7 +96,7 @@ The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** d
 
 $$
 I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
-\; \; \; \; \text{(cumulative gas mass)} 
+\; \; \; \; \textss{(cumulative gas mass)} 
 $$
 $$
 J_\varphi(x) = \int_0^x \frac{\alpha(x)f_P(x)\varphi(x)}{v_c^2(x)}x^2\,dx
