@@ -143,7 +143,7 @@ def F(x):
     return (Jphi(x) + Jth(x)) / I(x)
 ```
 
-### Plotting
+### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
 We compute $F(x_{\rm CGM})$ as a function of $x_{\rm CGM}$, then invert the axes to obtain a plot of atmospheric radius vs. mean specific energy. 
 
