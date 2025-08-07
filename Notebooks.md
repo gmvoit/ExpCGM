@@ -17,6 +17,8 @@ These notebooks illustrating the Essential elements of the framework were develo
 
 [MSU Essentials](https://github.com/gmvoit/ExpCGM/edit/main/notebooks/MSUEssentials.md) 
 
+[MSU Essentials](https://github.com/gmvoit/ExpCGM/edit/main/notebooks/MSUEssentials.ipynb) 
+
 [Essentials](descriptions/Essentials)
 
 [ExpCGM/Essentials](/ExpCGM/descriptions/Essentials)
