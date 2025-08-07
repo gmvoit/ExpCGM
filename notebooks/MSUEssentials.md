@@ -90,13 +90,13 @@ def vc2(x):
     return np.log(1 + x) / x - 1 / (1 + x)
 ```
 
-### Dimensionless Mass and Energy Integrals
+### Cumulative Mass and Energy Integrals
 
 The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** determines a galactic atmosphere's total specific energy $\varepsilon_{\rm CGM} = E_{\rm CGM} / M_{\rm CGM}$ by way of several dimensionless integrals:
 
 $$
 I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
-\; \; \; \; \text{\textss{(cumulative gas mass)}} 
+\; \; \; \; \text{(cumulative gas mass)} 
 $$
 $$
 J_\varphi(x) = \int_0^x \frac{\alpha(x)f_P(x)\varphi(x)}{v_c^2(x)}x^2\,dx
@@ -119,30 +119,28 @@ F(x) = \frac{J_\varphi(x) + J_{\rm th}(x)}{I(x)}
 
 This cell defines functions that compute the necessary dimensionless mass and energy integrals:
 ```python
-def integrandI(t): # We define the integrands as seperate functions before integrating them
-    return f_P(t) * t**2 / vc2(t)
+# To compute each mass and energy integral we first define a function giving the integrand, then perform the integration
 
+def integrandI(t): 
+    return f_P(t) * t**2 / vc2(t)
 def I(x):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return alpha / A_NFW * resultI
 
 def integrandJphi(t):
     return f_P(t) * phi(t) / vc2(t) * t**2
-
 def Jphi(x):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return alpha * resultJphi
 
 def integrandJth(t):
     return f_P(t) * t**2
-
 def Jth(x):
     resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
     return 3 / 2 * resultJth
 
 def F(x):
     return (Jphi(x) + Jth(x)) / I(x)
-
 ```
 
 ### Plotting
