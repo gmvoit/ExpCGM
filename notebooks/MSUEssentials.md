@@ -73,15 +73,15 @@ $$
 v_c^2(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ \frac{\ln(1+x)}{x} - \frac{1}{1+x} \right] \; \; .
 $$
 
-This cell defines some functions determining how those profiles depend on $x = r / r_{\rm s}$:
+This cell defines three functions determining how those profiles depend on $x = r / r_{\rm s}$:
 
 ```python
-# We will choose to set f_P equal to unity at r = r_s:
+# We choose to set f_P equal to unity at r = r_s:
 
 def f_P(x):        
     return x**(-alpha)
 
-# We will keep the NFW profile functions dimensionless and multiply them by A_NFW and v_phi^2 as needed:
+# We keep the NFW profile functions dimensionless and multiply them by A_NFW and v_phi^2 as needed:
 
 def phi(x):
     return 1 - np.log(1 + x) / x 
@@ -92,32 +92,34 @@ def vc2(x):
 
 ### Dimensionless Energy and Mass Integrals
 
-The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** determines a galactic atmosphere's total specific energy $\varepsilon_{\rm CGM} = E_{\rm CGM} / M_{\rm CGM}$ by way of several dimensionless integrals
+The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** determines a galactic atmosphere's total specific energy $\varepsilon_{\rm CGM} = E_{\rm CGM} / M_{\rm CGM}$ by way of several dimensionless integrals:
 
-We define the functions for each dimensionless integral along with their integrands.
-
-Gas mass:
 $$
-\text{Gas mass} \; \; I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
+I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
+\; \; \; \; \text{(cumulative gas mass)} 
 $$
-Gravitational energy:
 $$
 J_\varphi(x) = \int_0^x \frac{\alpha(x)f_P(x)\varphi(x)}{v_c^2(x)}x^2\,dx
+\; \; \; \; \text{(cumulative gravitational energy)} 
 $$
-Thermal energy:
 $$
 J_{\rm th}(x) = \frac{3}{2} \int_0^x f_P(x)\,x^2\,dx
+\; \; \; \; \text{(cumulative thermal energy)} 
 $$
-And the total specific energy
-$$
-F(x) = \frac{J_\varphi(x) + J_{\rm th}(x)}{I(x)}
-$$
-is defined such that:
+
+In this example, we are modeling an atmosphere supported entirely by thermal energy $(f_{\rm th} = 1)$ and so we do not need to do an integral that calculate a non-thermal energy profile.
+
+The total specific energy in this case is
 $$
 \varepsilon_{\rm CGM} = \frac{E_{\rm CGM}}{M_{\rm CGM}} = v_\varphi^2\, F\left(\frac{r_{\rm CGM}}{r_0}\right)
 $$
+where
+$$
+F(x) = \frac{J_\varphi(x) + J_{\rm th}(x)}{I(x)}
+$$
+is a dimensionless profile tracking the atmosphere's mean specific energy within $x$.
 
-
+This cell defines functions that compute the necessary integrals:
 ```python
 def integrandI(t): # We define the integrands as seperate functions before integrating them
     return f_P(t) * t**2 / vc2(t)
