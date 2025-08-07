@@ -26,8 +26,9 @@ nav_exclude: true
 
 # Modified Doruk/Jazzmin Notebook
 
-These Python notebook cells present an implementation of the ExpCGM framework that relates a galactic atmosphere's radius to its mean specific energy, based on various assumptions about the atmosphere's pressure profile and the gravitational potential confining it. To obtain the notebook file, go to 
+These Python notebook cells present an implementation of the ExpCGM framework that relates a galactic atmosphere's radius to its mean specific energy, based on various assumptions about the atmosphere's pressure profile and the gravitational potential confining it. To obtain a notebook file containing all of the cells, go to ...
 
+Before executing the rest of the cells, you will want to import a few items:
 
 ```python
 import numpy as np
