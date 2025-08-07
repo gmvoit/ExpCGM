@@ -35,12 +35,18 @@ import scipy.integrate as integrate
 import matplotlib.pyplot as plt
 ```
 
-## 1. Power‑Law Atmosphere in an NFW Potential
-This first section assumes a constant pressure shape function $\alpha = 1.5$, where
+## Power‑Law Atmosphere in an NFW Potential
+As described on the Essentials page, all ExpCGM atmosphere models begin with a shape function that describes the shape of the radil pressure profile:
 $$
-\alpha(r) = -\frac{d\ln P}{d\ln r}
+\alpha(r) = -\frac{d\ln P}{d\ln r} \; \; .
 $$
-and an NFW gravitational potential with $A_{\rm NFW}=4.625$.
+We will begin with the simplest shape function, which is a constant value of $\alpha$ resulting in a power-law pressure profile. Farther down the page, we will present an example in which $\alpha$ changes with radius.
+
+This initial model also assumes an NFW gravitational potential:
+$$
+\varphi_{\rm NFW} (x) A_{\rm NFW} v_\varphi^2 \left[ 1 - \frac {\ln (1+x)}{x} \right]
+$$
+in which $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$ and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $r = 2.163 r_{\rm s}$) equal to $v_\varphi$.
 
 
 ```python
