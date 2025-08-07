@@ -1,5 +1,5 @@
 ---
-title: Doruk/Jazzmin Notebook Modified
+title: MSU Essentials
 layout: default
 nav_exclude: true
 ---
