@@ -145,10 +145,9 @@ def F(x):
 
 ### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
-We compute $F(x_{\rm CGM})$ as a function of $x_{\rm CGM}$, then invert the axes to obtain a plot of atmospheric radius vs. mean specific energy. 
+We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon/v_\varphi^2$. First, we compute the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then, we invert that dependence to obtain the desired plot. 
 
-The dashed line shows how the normalization $P_0 \propto 1/I(x_{\rm CGM})$ of the atmosphere’s pressure profile declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands.
-
+The plot also shows how the pressure-profile normalization $P_0$ at $r = r_{\rm s}$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. It is simply proportional to $\propto 1/I(x_{\rm CGM})$.
 
 ```python
 # Plotting the results
