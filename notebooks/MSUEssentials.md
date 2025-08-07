@@ -40,7 +40,7 @@ from ipywidgets import interact, FloatSlider
 ```
 
 ## Power‑Law Atmosphere in an NFW Potential
-As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **ExpCGM** atmosphere models begin with a ***shape function*** that describes the shape of the radil pressure profile:
+As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **ExpCGM** atmosphere models begin with a ***shape function*** that describes the shape of a galactic atmosphere's radial pressure profile:
 $$
 \alpha(r) = -\frac{d\ln P}{d\ln r} \; \; .
 $$
@@ -48,20 +48,18 @@ We will begin with the simplest shape function: A constant value of $\alpha$ res
 
 This initial model also assumes an NFW gravitational potential:
 $$
-\varphi_{\rm NFW} (x) = A_{\rm NFW} v_\varphi^2 \left[ 1 - \frac {\ln (1+x)}{x} \right]
+\varphi_{\rm NFW} (x) = A_{\rm NFW} v_\varphi^2 \left[ 1 - \frac {\ln (1+x)}{x} \right] \; \; .
 $$
-in which $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$ and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$.
+Here, $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$.
 
+We will now set the values of some model parameters:
 
 ```python
-# Constants
-A_NFW = 4.625
 
-# Integration lower limit, since some functions starts become hard to integrate when very to close to 0
-eps = 10**(-4)
+alpha = 1.5       # constant power-law slope for pressure profile
+A_NFW = 4.625     # Normalization constant for NFW potential well
+eps = 10**(-4)    # Lower limit on x=r/r_s for numerical integrations
 
-# constant alpha of 1.5
-alpha = 1.5
 ```
 
 ### Defining Pressure, Velocity Profiles and the Gravitational Potential
