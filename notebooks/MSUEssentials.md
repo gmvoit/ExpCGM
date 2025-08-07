@@ -36,6 +36,7 @@ Before executing the rest of the cells, you will want to import a few items:
 import numpy as np
 import scipy.integrate as integrate
 import matplotlib.pyplot as plt
+from ipywidgets import interact, FloatSlider
 ```
 
 ## Power‑Law Atmosphere in an NFW Potential
