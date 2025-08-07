@@ -78,7 +78,7 @@ This cell defines three functions determining how those profiles depend on $x = 
 ```python
 # We choose to set f_P equal to unity at r = r_s:
 
-def f_P(x):        
+def f_P(x,alpha):        
     return x**(-alpha)
 
 # We keep the NFW profile functions dimensionless and multiply them by A_NFW and v_phi^2 as needed:
@@ -121,26 +121,27 @@ This cell defines functions that compute the necessary dimensionless mass and en
 ```python
 # To compute each mass and energy integral we first define a function giving the integrand, then perform the integration
 
-def integrandI(t): 
-    return f_P(t) * t**2 / vc2(t)
-def I(x):        
+def integrandI(t,alpha): 
+    return f_P(t,alpha) * t**2 / vc2(t)
+def I(x,alpha):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return alpha / A_NFW * resultI
 
-def integrandJphi(t):
-    return f_P(t) * phi(t) / vc2(t) * t**2
-def Jphi(x):
+def integrandJphi(t,alpha):
+    return f_P(t,alpha) * phi(t) / vc2(t) * t**2
+def Jphi(x,alpha):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return alpha * resultJphi
 
-def integrandJth(t):
-    return f_P(t) * t**2
-def Jth(x):
+def integrandJth(t,alpha):
+    return f_P(t,alpha) * t**2
+def Jth(x,alpha):
     resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
     return 3 / 2 * resultJth
 
-def F(x):
-    return (Jphi(x) + Jth(x)) / I(x)
+def F(x,alpha):
+    return (Jphi(x,alpha) + Jth(x,alpha)) / I(x,alpha)
+
 ```
 
 ### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
@@ -152,8 +153,8 @@ The plot also shows how the pressure-profile normalization $P_0$ at $r = r_{\rm 
 ```python
 # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
 x_values = np.logspace(-1.5, 2, 50)
-y1_values = [F(x) for x in x_values]
-y2_values = [1/I(x) for x in x_values]
+y1_values = [F(x,alpha) for x in x_values]
+y2_values = [1/I(x,alpha) for x in x_values]
 
 # Choose a font
 gfont = {'fontname':'georgia'}
@@ -163,36 +164,40 @@ plt.rcParams['font.size'] = 12
 # Specify a figure size
 fig, ax1 = plt.subplots(figsize=(8, 6))
 
-# Specify a figure size
+# Plot x_CGM as a function of F(x_CGM) using a solid blue-violet line
 ax1.plot(y1_values, x_values, color='blueviolet', label='$x_{\\text{CGM}}$')
 ax1.set_xscale('linear')
 ax1.set_yscale('log')
 ax1.set_xlabel(r'$\mathrm{E}_{\mathrm{CGM}} \ / \ \mathrm{M}_{\mathrm{CGM}} \ \mathrm{v}_{\varphi}$', fontsize=12, **gfont)
-ax1.set_ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$ (y1 scale)', fontsize=12, **gfont)
-ax1.set_ylim(10**-1.5, 10**2)
+ax1.set_ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$', fontsize=12, **gfont)
+ax1.set_ylim(10**-1.5, 10**2)0
 ax1.grid(True, linestyle='--', linewidth=0.5)
 
+# Plot 1/I(x_CGM) as a function of F(x_CGM) using a dashed orange line
 ax2 = ax1.twinx()
 ax2.plot(y1_values, y2_values, color='orange', linestyle='--', label='$1/I(x)$')
 ax2.set_ylabel('$1\\,/\\,I(x_{\\text{CGM}})$', fontsize=12, **gfont)
 ax2.set_yscale('log')
 
+# Add a legend
 lines_1, labels_1 = ax1.get_legend_handles_labels()
 lines_2, labels_2 = ax2.get_legend_handles_labels()
 ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
 
-plt.title('Atmospheric Radius vs Mean Specific Energy', **gfont)
+# Add a title and show the plot
+plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
 
 ```
-
-
     
 ![png](Notebook_1_files/Notebook_1_9_0.png)
     
 
+### Adjustable Power-Law Slope
 
-## 2. Variable Shape Function
+
+
+## General Pressure Profile in an NFW Potential
 
 In this section we use a shape function $\alpha(x)$ that varies with radius. The simplified cosmological profile 
 $$
