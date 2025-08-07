@@ -156,7 +156,7 @@ x_values = np.logspace(-1.5, 2, 50)
 y1_values = [F(x,alpha) for x in x_values]
 y2_values = [1/I(x,alpha) for x in x_values]
 
-# Choose a title font
+# Choose a font
 gfont = {'fontname':'georgia'}
 plt.rcParams['font.family'] = 'georgia' 
 plt.rcParams['font.size'] = 12 
@@ -168,15 +168,15 @@ fig, ax1 = plt.subplots(figsize=(8, 6))
 ax1.plot(y1_values, x_values, color='blueviolet', label='$x_{\mathrm{CGM}}$')
 ax1.set_xscale('linear')
 ax1.set_yscale('log')
-ax1.set_xlabel(r'$E_{\mathrm{CGM}} / M_{\mathrm{CGM}} v_{\varphi}^2$', fontsize=12)
-ax1.set_ylabel(r'$x_{\mathrm{CGM}} = r_\mathrm{CGM} / r_\mathrm{s}$', fontsize=12)
+ax1.set_xlabel(r'$E_\mathrm{CGM} / M_\mathrm{CGM} v_{\varphi}^2$', fontsize=12)
+ax1.set_ylabel(r'$x_\mathrm{CGM} = r_\mathrm{CGM} / r_\mathrm{s}$', fontsize=12)
 ax1.set_ylim(10**-1.5, 10**2)
 ax1.grid(True, linestyle='--', linewidth=0.5)
 
 # Plot 1/I(x_CGM) as a function of F(x_CGM) using a dashed orange line
 ax2 = ax1.twinx()
 ax2.plot(y1_values, y2_values, color='orange', linestyle='--', label='$1/I(x)$')
-ax2.set_ylabel('$1/I(x_{\mathrm{CGM}})$', fontsize=12)
+ax2.set_ylabel('$1/I(x_\mathrm{CGM})$', fontsize=12)
 ax2.set_yscale('log')
 
 # Add a legend
@@ -204,7 +204,7 @@ def update(alpha=1.5):                           # Default value of alpha is set
     x_values = np.logspace(-1.5, 4, 50)          # Radius domain is -1.5 < ln(r/r_s) < 4 
     y_values = [F(x, alpha) for x in x_values]   # epsilon_CGM range is based on r/r_s domain 
 
-    # Choose a title font
+    # Choose a font
     gfont = {'fontname':'georgia'}
     plt.rcParams['font.family'] = 'georgia'  
     plt.rcParams['font.size'] = 12 
@@ -214,8 +214,8 @@ def update(alpha=1.5):                           # Default value of alpha is set
     plt.xlim(0, 4.7)                             # Specify horizontal plot limits
     plt.xscale('linear')
     plt.yscale('log')
-    plt.xlabel(r'$\mathrm{E}_{\mathrm{CGM}} \ / \ \mathrm{M}_{\mathrm{CGM}} \ \mathrm{v}_{\varphi}^2$', fontsize=12, **gfont)
-    plt.ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$', fontsize=12, **gfont)
+    plt.xlabel(r'$E_\mathrm{CGM} / M_\mathrm{CGM} v_\varphi^2$', fontsize=12)
+    plt.ylabel(r'$x_{\mathrm{CGM}} = r_\mathrm{CGM} / r_s$', fontsize=12)
     plt.grid(True, linestyle='--', linewidth=0.5)
     plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
     plt.show()
