@@ -90,7 +90,7 @@ def vc2(x):
     return np.log(1 + x) / x - 1 / (1 + x)
 ```
 
-### Dimensionless Energy and Mass Integrals
+### Dimensionless Mass and Energy Integrals
 
 The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** determines a galactic atmosphere's total specific energy $\varepsilon_{\rm CGM} = E_{\rm CGM} / M_{\rm CGM}$ by way of several dimensionless integrals:
 
@@ -113,13 +113,11 @@ The total specific energy of this model atmosphere is
 $$
 \varepsilon_{\rm CGM} = \frac{E_{\rm CGM}}{M_{\rm CGM}} = v_\varphi^2\, F\left(\frac{r_{\rm CGM}}{r_0}\right)
 $$
-where
+where $F(x)$ is a dimensionless profile function tracking the atmosphere's mean specific energy within $x$:
 $$
 F(x) = \frac{J_\varphi(x) + J_{\rm th}(x)}{I(x)}
-$$
-is a dimensionless profile tracking the atmosphere's mean specific energy within $x$.
 
-This cell defines functions that compute the necessary integrals:
+This cell defines functions that compute the necessary dimensionless mass and energy integrals:
 ```python
 def integrandI(t): # We define the integrands as seperate functions before integrating them
     return f_P(t) * t**2 / vc2(t)
