@@ -96,7 +96,7 @@ The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** d
 
 $$
 I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
-\; \; \; \; \textss{(cumulative gas mass)} 
+\; \; \; \; \text{\textss{(cumulative gas mass)}} 
 $$
 $$
 J_\varphi(x) = \int_0^x \frac{\alpha(x)f_P(x)\varphi(x)}{v_c^2(x)}x^2\,dx
@@ -107,9 +107,9 @@ J_{\rm th}(x) = \frac{3}{2} \int_0^x f_P(x)\,x^2\,dx
 \; \; \; \; \text{(cumulative thermal energy)} 
 $$
 
-In this example, we are modeling an atmosphere supported entirely by thermal energy $(f_{\rm th} = 1)$ and so we do not need to do an integral that calculate a non-thermal energy profile.
+In this example, we are modeling an atmosphere supported entirely by thermal energy $(f_{\rm th} = 1)$ and so we do not need an integral that calculates a non-thermal energy profile.
 
-The total specific energy in this case is
+The total specific energy of this model atmosphere is
 $$
 \varepsilon_{\rm CGM} = \frac{E_{\rm CGM}}{M_{\rm CGM}} = v_\varphi^2\, F\left(\frac{r_{\rm CGM}}{r_0}\right)
 $$
