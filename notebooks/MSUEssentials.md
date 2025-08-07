@@ -124,19 +124,19 @@ This cell defines functions that compute the necessary dimensionless mass and en
 def integrandI(t,alpha): 
     return f_P(t,alpha) * t**2 / vc2(t)
 def I(x,alpha):        
-    resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
+    resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha,), limit=50)
     return alpha / A_NFW * resultI
 
 def integrandJphi(t,alpha):
     return f_P(t,alpha) * phi(t) / vc2(t) * t**2
 def Jphi(x,alpha):
-    resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
+    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha,), limit=50)
     return alpha * resultJphi
 
 def integrandJth(t,alpha):
     return f_P(t,alpha) * t**2
 def Jth(x,alpha):
-    resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
+    resultJth, _ = integrate.quad(integrandJth, eps, x, args=(alpha,), limit=50)
     return 3 / 2 * resultJth
 
 def F(x,alpha):
@@ -170,7 +170,7 @@ ax1.set_xscale('linear')
 ax1.set_yscale('log')
 ax1.set_xlabel(r'$\mathrm{E}_{\mathrm{CGM}} \ / \ \mathrm{M}_{\mathrm{CGM}} \ \mathrm{v}_{\varphi}$', fontsize=12, **gfont)
 ax1.set_ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$', fontsize=12, **gfont)
-ax1.set_ylim(10**-1.5, 10**2)0
+ax1.set_ylim(10**-1.5, 10**2)
 ax1.grid(True, linestyle='--', linewidth=0.5)
 
 # Plot 1/I(x_CGM) as a function of F(x_CGM) using a dashed orange line
@@ -195,7 +195,41 @@ plt.show()
 
 ### Adjustable Power-Law Slope
 
+To change the power-law slope of the pressure profile, you can change the value of $\alpha$ and execute the plotting code again, or you can use an interactive version of the plotting code with a slider that determines $\alpha$
 
+This cell contains a function that updates the plot when called:
+
+```python
+def update(alpha=1.5):                           # Default value of alpha is set to 1.5
+    x_values = np.logspace(-1.5, 4, 50)          # Radius domain is -1.5 < ln(r/r_s) < 4 
+    y_values = [F(x, alpha) for x in x_values]   # epsilon_CGM range is based on r/r_s domain 
+
+    # Choose a font
+    gfont = {'fontname':'georgia'}
+    plt.rcParams['font.family'] = 'georgia'  
+    plt.rcParams['font.size'] = 12 
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(y_values, x_values)                 # r/r_s on vertical axis, epsilon_CGM/vc^2 on horizontal axis
+    plt.xlim(0, 4.7)                             # Specify horizontal plot limits
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.xlabel(r'$\mathrm{E}_{\mathrm{CGM}} \ / \ \mathrm{M}_{\mathrm{CGM}} \ \mathrm{v}_{\varphi}^2$', fontsize=12, **gfont)
+    plt.ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$', fontsize=12, **gfont)
+    plt.grid(True, linestyle='--', linewidth=0.5)
+    plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
+    plt.show()
+```
+
+Running the next cell then makes an interactive plot with an adjustable value of $\alpha$:
+
+```python
+#   continuous_update=True allows the graph to update while slider is moved
+#   continuous_update=False updates the graph after the slider stops moving
+
+alpha_slider = FloatSlider(min=1.25, max=2.5, step=0.01, value=1.5, continuous_update=True)
+interact(update, alpha=alpha_slider);
+```
 
 ## General Pressure Profile in an NFW Potential
 
@@ -204,8 +238,6 @@ $$
 \alpha(r) = 1.7 \left( \frac{2r/r_{\rm max}}{1+r/r_{\rm max}} \right)
 $$
 represents a cosmological atmosphere. It is designed to have $\alpha \approx 1.7$ near the radius $r_{\rm max} = 2.16\, r_s$, where $v_c^2(r)$ peaks in an NFW gravitational potential.
-
-
 
 ```python
 rmax = 2.16
