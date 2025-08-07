@@ -24,7 +24,7 @@ nav_exclude: true
    </script>
 </head>
 
-# Modified Doruk/Jazzmin Notebook
+# MSU Essentials Notebook
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
