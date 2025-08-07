@@ -145,22 +145,25 @@ def F(x):
 
 ### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
-We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon/v_\varphi^2$. First, we compute the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then, we invert that dependence to obtain the desired plot. 
+We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. First, we compute the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then, we invert that dependence to obtain the desired plot. 
 
-The plot also shows how the pressure-profile normalization $P_0$ at $r = r_{\rm s}$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. It is simply proportional to $\propto 1/I(x_{\rm CGM})$.
+The plot also shows how the pressure-profile normalization $P_0$ at $r = r_{\rm s}$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands: $P_0$ is simply proportional to $\propto 1/I(x_{\rm CGM})$.
 
 ```python
-# Plotting the results
+# To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
 x_values = np.logspace(-1.5, 2, 50)
 y1_values = [F(x) for x in x_values]
 y2_values = [1/I(x) for x in x_values]
 
+# Choose a font
 gfont = {'fontname':'georgia'}
 plt.rcParams['font.family'] = 'georgia' 
 plt.rcParams['font.size'] = 12 
 
+# Specify a figure size
 fig, ax1 = plt.subplots(figsize=(8, 6))
 
+# Specify a figure size
 ax1.plot(y1_values, x_values, color='blueviolet', label='$x_{\\text{CGM}}$')
 ax1.set_xscale('linear')
 ax1.set_yscale('log')
