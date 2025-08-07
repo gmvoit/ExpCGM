@@ -48,47 +48,40 @@ We will begin with the simplest shape function: A constant value of $\alpha$ res
 
 This initial model also assumes an NFW gravitational potential:
 $$
-\varphi_{\rm NFW} (x) = A_{\rm NFW} v_\varphi^2 \left[ 1 - \frac {\ln (1+x)}{x} \right] \; \; .
+\varphi_{\rm NFW} (x) = A_{\rm NFW} \, v_\varphi^2 \, \left[ 1 - \frac {\ln (1+x)}{x} \right] \; \; .
 $$
-Here, $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$.
+Here, $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen to put the potential's zero point at $r = 0$.
 
 We will now set the values of some model parameters:
 
 ```python
-
 alpha = 1.5       # constant power-law slope for pressure profile
 A_NFW = 4.625     # Normalization constant for NFW potential well
 eps = 10**(-4)    # Lower limit on x=r/r_s for numerical integrations
-
 ```
 
-### Defining Pressure, Velocity Profiles and the Gravitational Potential
+### Pressure Profile and Circular Velocity Profile
 
-The normalized dimensionless pressure profile $f_P(x)$ is obtained by integrating the shape function. Here, $x = r/r_s$ for a scale radius $r_s$.
+In general, the dimensionless pressure-profile function $f_P$ is obtained by integrating the shape function $\alpha (x)$ over $\ln x$. However, no integration is necessary for constant $\alpha$. We can simply define the pressure-profile function to be 
 $$
-f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
+f_P(r) = \left(\frac{r}{r_0}\right)^{-\alpha} \; \; ,
 $$
-For a power-law atmosphere this becomes:
+where $r_0$ is the radius at which $f_P$ is normalized to unity.
+
+The NFW potential function is given above, but we will also be using a circular velocity profile function obtained by differentating $\varphi(x)$ by $x$ and then multiplying the result by $x$:
 $$
-f_P(r) = \left(\frac{r}{r_0}\right)^{-\alpha}
-$$
-The NFW potential with a zero point at $r=0$ is:
-$$
-\varphi(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ 1 - \frac{\ln(1+x)}{x} \right]
-$$
-Where $v_\varphi$ is the maximum value of the velocity profile. With our choice of $A_{\rm NFW} = 4.625$, the circular velocity function becomes:
-$$
-v_c^2(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ \frac{\ln(1+x)}{x} - \frac{1}{1+x} \right]
+v_c^2(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ \frac{\ln(1+x)}{x} - \frac{1}{1+x} \right] \; \; .
 $$
 
+This cell defines some functions determining how those profiles depend on $x = r / r_{\rm s}$:
 
 ```python
-# Defining the functions as described above for a constant alpha:
+# We will choose to set f_P equal to unity at r = r_s:
 
 def f_P(x):        
     return x**(-alpha)
 
-# The A_NFW * v_phi term simplifies later, so we can keep these dimensionless and only look at the shape of the function.
+# We will keep the NFW profile functions dimensionless and multiply them by A_NFW and v_phi^2 as needed:
 
 def phi(x):
     return 1 - np.log(1 + x) / x 
@@ -97,13 +90,15 @@ def vc2(x):
     return np.log(1 + x) / x - 1 / (1 + x)
 ```
 
-### Defining the Integrals
+### Dimensionless Energy and Mass Integrals
+
+The [Essentials](/ExpCGM/descriptions/Essentials) page explains how **ExpCGM** determines a galactic atmosphere's total specific energy $\varepsilon_{\rm CGM} = E_{\rm CGM} / M_{\rm CGM}$ by way of several dimensionless integrals
 
 We define the functions for each dimensionless integral along with their integrands.
 
 Gas mass:
 $$
-I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
+\text{Gas mass} \; \; I(x) = v_\varphi^2 \int_0^x \frac{\alpha(x)f_P(x)}{v_c^2(x)}x^2\,dx
 $$
 Gravitational energy:
 $$
