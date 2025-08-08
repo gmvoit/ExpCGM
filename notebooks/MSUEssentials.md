@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-These Python notebook cells present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on various assumptions about the atmosphere's pressure profile and the gravitational potential confining it. To copy and paste a cell into a notebook running locally, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
+These Python notebook cells present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on various assumptions about the atmosphere's pressure profile and the gravitational potential well confining it. To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
 
 Before executing the rest of the cells, you will want to import a few items:
 
