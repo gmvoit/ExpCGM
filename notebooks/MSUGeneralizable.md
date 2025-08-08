@@ -176,6 +176,25 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/vc_dimensionless.png)
 
+## Temperature Profile and Halo Mass
+
+In the **ExpCGM framework, the temperature profile of an atmosphere fully supported by thermal pressure depends only on $\alpha(x)$ and $v_c(x)$: 
+$$ 
+kT(x) = \frac {\mu m_p v_\mathrm{c}^2 (x)} {\alpha(x) 
+$$
+However, the normalization factor $v_\varphi$ of the circular velocity profile depends on the total mass within a particular radius.
+
+To calculate the normalization factor, an **ExpCGM** user needs to specify a halo mass $M_\mathrm{halo}$, a cosmological redshift $z$, a halo concentration factor $c_\mathrm{halo} = r_\mathrm{halo} / r_\mathrm{s}$, and the density contrast factor $\Delta_\mathrm{halo}$ relating the mean mass density within $r_\mathrm{halo}$ to the universe's critical density at redshift $z$. The formula determining the normalization factor is
+$$
+v_\mathrm{c}(r_\mathrm{halo}) 
+  = \left( \frac {\Delta_\mathrm{halo}} {2} \right)^{1/6}
+    \left[ G M_\mathrm{halo} H(z) \right]^{1/3}
+$$
+The following cell defines a function that returns $v_\varphi$ when given $z$, $c_\mathrm{halo}$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass:
+
+```python
+```
+
 ## Cumulative Mass and Energy Integrals
 
 We also redefine the energy integrals so they have $\alpha(x)$ inside them. We can also define the $v_c^2(x)$ and $\varphi(x)$ functions the same way again so each section of the notebook is self-contained.
