@@ -191,7 +191,7 @@ plt.show()
 
 ```
     
-![png](Notebook_1_files/Notebook_1_9_0.png)
+![png](Notebook_1_files/eCGM_xCGM_1.5.png)
     
 
 ### Adjustable Power-Law Slope
