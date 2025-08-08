@@ -149,7 +149,7 @@ def F(x,alpha):
 
 We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
-The plot also shows how the pressure-profile normalization $P_0$ factor, which is the pressure at $r = r_{\rm s}$ in this example, declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is simply proportional to $\propto 1/I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
+The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example, and it is directly proportional to $\propto 1/I(x_{\rm CGM})$, with a normalization factor given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
 ```python
 # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
