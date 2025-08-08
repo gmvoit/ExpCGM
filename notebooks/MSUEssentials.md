@@ -50,7 +50,7 @@ This initial model also assumes an NFW gravitational potential:
 $$
 \varphi_{\rm NFW} (x) = A_{\rm NFW} \, v_\varphi^2 \, \left[ 1 - \frac {\ln (1+x)}{x} \right] \; \; .
 $$
-Here, $x = r/r_{\rm s}$ represents radius in units of the profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen to put the potential's zero point at $r = 0$.
+Here, $x = r/r_{\rm s}$ represents radius in units of the NFW profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen to put the potential's zero point at $r = 0$.
 
 We will now set the values of some model parameters:
 
@@ -238,6 +238,7 @@ def update_alpha(alpha=1.5):
     # Add a title and show the plot
     plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
     plt.show()
+
 ```
 
 Running the next cell then makes an interactive plot with an adjustable value of $\alpha$:
@@ -248,8 +249,8 @@ Running the next cell then makes an interactive plot with an adjustable value of
 
 alpha_slider = FloatSlider(min=1.25, max=2.5, step=0.01, value=1.5, continuous_update=True)
 interact(update_alpha, alpha=alpha_slider);
+
 ```
 
-    
-![png](Notebook_1_files/Notebook_1_22_0.png)
+Adjusting the slider shows that increasing $\alpha$ increases the radius of an atmosphere with a given specific energy. That happens because a hydrostatic atmosphere with a steeper power-law slope (larger $\alpha$) has a lower equilibrium temperature. Therefore, a greater proportion of its specific energy must be gravitational, meaning that more of its mass must be at larger radii than an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law slope.
     
