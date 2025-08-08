@@ -51,18 +51,22 @@ Its slope if very shallow slope $(\alpha \ll 1)$ at small radii. It steepens to 
 
 To prepare for using that pressure profile in conjunction with an NFW potential well, we will rewrite it as a function of $x = r / r_\mathrm{s}$:
 $$
-\alpha(x) = \frac {1.59 x} {1 + 0.486 x} 
+\alpha(x) = \frac {1.59 x} {1 + 0.468 x} 
 $$
-When $\alpha(x)$ is not constant, a numerical integration is needed to determine the  now have to use the integral form of $f_P(x)$ since alpha is not constant. 
+The following cell defines that function and can be replaced with a different user-defined function:
+
+```python
+def alpha(x):
+    return (1.59*x)/(1 + 0.468*x)
+```
+
+Because $\alpha(x)$ is not constant, a numerical integration is needed to determine the the dimensionless pressure profile function: 
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
-
-Executing this cell integrates $\alpha (x)$ over $\ln x$ to obtain a dimensionless pressure profile function $f_P(x)$ that is normalized to unity at $r = r_\mathrm{x}$:
+Executing this cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain a version of $f_P(x)$ that is normalized to unity at $r = r_\mathrm{x}$:
 
 ```python
-eps = 10**(-4)
-
 def integrandf_P(t):
     return alpha(t) / t
 
@@ -74,13 +78,15 @@ def f_P(x):
 
 To check the result, this cell makes a plot showing $f_P(x)$:
 
+```python
+
+```
+
 ## User-Defined Potential Wells
 
 ```python
 A_NFW = 4.625
-
-def alpha(x):
-    return (3.4*x)/(rmax + x)
+eps = 10**(-4)     # Lower limit on x=r/r_s for numerical integration
 ```
 
 To check the result, this cell makes a plot showing $v_\mathrm{c}(x)$:
