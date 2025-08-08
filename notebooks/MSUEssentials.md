@@ -254,6 +254,8 @@ interact(update_alpha, alpha=alpha_slider);
 
 Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates how changing to $\alpha = 2$ affects the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$:
 
+![png](Notebook_1_files/eCGM_xCGM_2.0.png)
+
 Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
 Along with demonstrating how to implement more complicated shape functions, the [MSU Generalizable](MSUGeneralizable) page also demonstrates how to implement alternative potential wells, including ones with a central galaxy.
