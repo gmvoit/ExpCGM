@@ -97,7 +97,7 @@ plt.ylabel(r'$f_P = P(r)/P(r_\mathrm{s})', fontsize=12)
 plt.title('Dimensionless Pressure Profile', **gfont)
 plt.show()
 ```
-![png](MSUGeneralizable_files/f_p.pdf)
+![png](MSUGeneralizable_files/f_p.png)
 
 ## User-Defined Potential Wells
 
