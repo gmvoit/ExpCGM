@@ -190,9 +190,16 @@ v_\mathrm{c}(r_\mathrm{halo})
   = \left( \frac {\Delta_\mathrm{halo}} {2} \right)^{1/6}
     \left[ G M_\mathrm{halo} H(z) \right]^{1/3}
 $$
-The following cell defines a function that returns $v_\varphi$ when given $z$, $c_\mathrm{halo}$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass:
+The following cell defines a function that returns $v_\varphi$ (in units of kilometers per second) when given $z$, $c_\mathrm{halo}$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ (in units of solar mass):
 
 ```python
+def v_phi(M_halo,z,c_halo,Delta):
+  # Specify some constants
+  G = 6.67e-8     # gravitational constant in cgs units
+  H0 = 1./4.4e17  # current Hubble constant in inverse seconds
+  MSun = 2.e33    # solar mass in grams
+  Omat = 0.3      # cosmological matter density parameter
+
 ```
 
 ## Cumulative Mass and Energy Integrals
