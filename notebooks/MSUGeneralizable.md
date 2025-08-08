@@ -99,6 +99,12 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/f_p.png)
 
+In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy, $\varepsilon_\mathrm{CGM}$. In this case, the normalization factor is
+$$
+P_0 = P(r_\mathmr{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} I(x_\mathrm{CGM}) 
+$$
+As explained on the [Essentials](/ExpCGM/descriptions/Essentials) page, $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$.
+
 ## User-Defined Potential Wells
 
 ```python
