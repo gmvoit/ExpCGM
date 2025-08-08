@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-These Python notebook cells present generalizable extensions of the **ExpCGM** implementation presented by the [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) notebook ...
+These Python notebook cells present generalizable extensions of the **ExpCGM** implementation outlined within the [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) notebook ...
 
 ... To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
 
@@ -38,9 +38,9 @@ Before doing any calculations, import the necessary widgets  ...
 
 To generalize the atmosphere's pressure profile, a user needs to specify its shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
 
-Here we will implement a shape function describing the simplified cosmological profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page:
+This example implements a shape function describing the simplified cosmological profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page:
 $$
-\alpha(r) = 1.7 \left( \frac{2r/r_\mathrm{max}}{1+r/r_\,mathrm{max}} \right)
+\alpha(r) = 1.7 \left( \frac{2r/r_\mathrm{max}}{1+r/r_\mathrm{max}} \right)
 $$
 It has a very shallow slope $(\alpha \ll 1)$ at small radii, steepens to $\alpha \approx 1.7$ near the radius $r_{\rm max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential, and converges toward $\alpha = 3.4$ at large radii.
 
