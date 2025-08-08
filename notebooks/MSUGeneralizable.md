@@ -178,7 +178,7 @@ plt.show()
 
 ## Temperature Profile and Halo Mass
 
-In the **ExpCGM framework, the temperature profile of an atmosphere fully supported by thermal pressure depends only on $\alpha(x)$ and $v_c(x)$: 
+In the **ExpCGM** framework, the temperature profile of an atmosphere fully supported by thermal pressure depends only on $\alpha(x)$ and $v_c(x)$: 
 $$ 
 kT(x) = \frac {\mu m_p v_\mathrm{c}^2 (x)} {\alpha(x) 
 $$
