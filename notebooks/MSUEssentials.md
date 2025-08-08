@@ -252,5 +252,5 @@ interact(update_alpha, alpha=alpha_slider);
 
 ```
 
-Adjusting the slider shows that increasing $\alpha$ increases the radius of an atmosphere with a given specific energy. That happens because a hydrostatic atmosphere with a steeper power-law slope (larger $\alpha$) has a lower equilibrium temperature. Therefore, a greater proportion of its specific energy must be gravitational, meaning that more of its mass must be at larger radii than an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law slope.
+Adjusting the slider shows that increasing $\alpha$ increases the radius of an atmosphere with a given specific energy. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. Therefore, a greater proportion of its specific energy must be gravitational, meaning that more of its mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile.
     
