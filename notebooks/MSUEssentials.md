@@ -145,9 +145,9 @@ def F(x,alpha):
 
 ```
 
-### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
+### Plotting the Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
-We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
+We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
 The plot also shows how the pressure-profile normalization $P_0$ factor, which is the pressure at $r = r_{\rm s}$ in this example, declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is simply proportional to $\propto 1/I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
@@ -258,4 +258,4 @@ Adjusting the slider shows that increasing $\alpha$ increases the radius of a ga
 
 Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
-Along with demonstrating how to implement more complicated shape functions, the [MSU Generalizable](MSUGeneralizable) page also demonstrates how to implement alternative potential wells, including ones with a central galaxy.
+To go further, see the [MSU Generalizable](MSUGeneralizable) page. Along with demonstrating how to implement more complicated shape functions, it also demonstrates how to implement alternative potential wells, including ones with a central galaxy.
