@@ -64,7 +64,7 @@ Because $\alpha(x)$ is not constant, a numerical integration is needed to determ
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
-Executing this cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain a version of $f_P(x)$ that is normalized to unity at $r = r_\mathrm{x}$:
+Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain a version of $f_P(x)$ that is normalized to unity at $r = r_\mathrm{s}$:
 
 ```python
 def integrandf_P(t):
@@ -99,37 +99,55 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/f_p.png)
 
-In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy, $\varepsilon_\mathrm{CGM}$. In this case, the normalization factor is
+In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy ($\varepsilon_\mathrm{CGM}$). In this case, the normalization factor is
 $$
-P_0 = P(r_\mathmr{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} I(x_\mathrm{CGM}) 
+P_0 = P(r_\mathrm{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} {I(x_\mathrm{CGM})} 
 $$
 As explained on the [Essentials](/ExpCGM/descriptions/Essentials) page, $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$.
 
 ## User-Defined Potential Wells
 
+The default choice for a halo potential well in **ExpCGM** is an NFW potential well, described by the dimensionless functions defined in the following cell:
+
 ```python
-A_NFW = 4.625
+A_NFW = 4.625      # Normalization constant for the NFW potential well
 eps = 10**(-4)     # Lower limit on x=r/r_s for numerical integration
+
+def vc2_NFW(x):
+    return np.log(1+x) / x - 1 / (1+x)
+
+def phi_NFW(x):
+    return 1- np.log(1+x)/x
+```
+
+Later, we will multiply each of these functions by $v_\varphi^2$, the square of the potential's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
+
+Here, we will extend the potential well model by adding the potential well of a central galaxy with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. And to represent the central galaxy, we will use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
+
+$$
+\varphi_\mathrm{H} = 4 v_\mathrm{H}^2 
+  \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
+$$
+
+This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$:
+
+```python
+def phi_gal(x,x_H,f_vgal):
+    return 4 * f_vgal**2 * (1 - x_H / (x + x_H) )
+
+def vc2_gal(x):
+    return 4 * f_vgal**2 * x_H * x / (x + x_H)**2
+
 ```
 
 To check the result, this cell makes a plot showing $v_\mathrm{c}(x)$:
 
-
-
-
-
-
-
+## Cumulative Mass and Energy Integrals
 
 We also redefine the energy integrals so they have $\alpha(x)$ inside them. We can also define the $v_c^2(x)$ and $\varphi(x)$ functions the same way again so each section of the notebook is self-contained.
 
 
 ```python
-def vc2(x):
-    return np.log(1+x) / x - 1 / (1+x)
-
-def phi(x):
-    return 1- np.log(1+x)/x
 
 def integrandI(t):
     return alpha(t) * f_P(t) * t**2 / vc2(t)
