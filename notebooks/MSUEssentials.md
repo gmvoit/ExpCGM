@@ -198,7 +198,7 @@ plt.show()
 
 To change the power-law slope of the pressure profile, you can change the value of $\alpha$ and execute the plotting code again, or you can use an interactive version of the plotting code with a slider that determines $\alpha$
 
-This cell contains a function called *updatePL* that updates the plot when the slider moves:
+This cell defines a function called *update_alpha* that updates the plot when the slider moves:
 
 ```python
 def update_alpha(alpha=1.5):
