@@ -88,8 +88,8 @@ gfont = {'fontname':'georgia'}
 plt.rcParams['font.family'] = 'georgia' 
 plt.rcParams['font.size'] = 12 
 
-plt.plot(y1_values, x_values, color='blueviolet', label='$x_{\\text{CGM}}$')
-plt.xscale('linear')
+plt.plot(x_values, y_values, color='blueviolet')
+plt.xscale('log')
 plt.yscale('log')
 plt.xlabel(r'$x = r / r_\mathrm{s}$', fontsize=12)
 plt.ylabel(r'$f_P = P(r)/P(r_\mathrm{s})', fontsize=12)
