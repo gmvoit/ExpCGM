@@ -132,11 +132,11 @@ $$
 This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$:
 
 ```python
-def phi_gal(x,x_H,f_vgal):
-    return 4 * f_vgal**2 * (1 - x_H / (x + x_H) )
+def phi_gal(x,x_H,f_H):
+    return 4 * f_H**2 * (1 - x_H / (x + x_H) )
 
-def vc2_gal(x):
-    return 4 * f_vgal**2 * x_H * x / (x + x_H)**2
+def vc2_gal(x,x_H,f_H):
+    return 4 * f_H**2 * x_H * x / (x + x_H)**2
 
 ```
 
