@@ -13,9 +13,9 @@ This section of the **ExpCGM** website presents notebooks contributed by the fra
 {: .warning}
 The notebooks currently in this section of the website are prototypes that are in the process of being corrected and refined.
 
-These notebooks illustrating the Essential elements of the framework were developed by MSU students Doruk Yaldiz and Jazzmin Partridge:
+These notebooks demonstrating how to implement some key elements of the **ExpCGM** framework were developed by MSU students Doruk Yaldiz and Jazzmin Partridge:
 
-* The [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) shows how to use Python to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page illustrating the relationship between atmospheric radius and atmospheric specific energy in **ExpCGM**.
+* The [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) shows how to use Python to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page illustrating how a galactic atmosphere's radius depends on its specific energy, according to **ExpCGM**.
 
 * The [MSU Generalizable Notebook](/ExpCGM/notebooks/MSUGeneralizable) shows how to extend the Python code in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials), so that user-defined pressure profiles and potential wells can be incorporated into **ExpCGM**.
 
