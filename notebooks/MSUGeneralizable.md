@@ -28,11 +28,16 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-The Python notebook cells on this page present generalizable extensions of the **ExpCGM** implementation outlined within the [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) notebook ...
+The Python notebook cells on this page demonstrate how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into a Python notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
 
-... To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
+Before executing the following cells, import these items:  
 
-Before executing the following cells, import these items:  ...
+```python
+import numpy as np
+import scipy.integrate as integrate
+import matplotlib.pyplot as plt
+from ipywidgets import interact, FloatSlider
+```
 
 ## General Pressure Profile
 
