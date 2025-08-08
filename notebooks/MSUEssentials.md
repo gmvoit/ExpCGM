@@ -44,9 +44,9 @@ As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **Ex
 $$
 \alpha(r) = -\frac{d\ln P}{d\ln r}
 $$
-Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable](MSUGeneralizable) page demonstrates how to implement more complicated shape functions.
+Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable Notebook](MSUGeneralizable) demonstrates how to implement more complicated shape functions.
 
-This simple **ExpCGM** model also assumes an NFW gravitational potential:
+This basic **ExpCGM** model also assumes an NFW gravitational potential:
 $$
 \varphi_{\rm NFW} (x) = A_{\rm NFW} \, v_\varphi^2 \, \left[ 1 - \frac {\ln (1+x)}{x} \right]
 $$
@@ -252,10 +252,10 @@ interact(update_alpha, alpha=alpha_slider);
 
 ```
 
-Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates how changing to $\alpha = 2$ affects the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$:
+Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$ for $\alpha = 2$:
 
 ![png](Notebook_1_files/eCGM_xCGM_2.0.png)
 
 Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
-To go further, see the [MSU Generalizable](MSUGeneralizable) page. Along with demonstrating how to implement more complicated shape functions, it also demonstrates how to implement alternative potential wells, including ones with a central galaxy.
+To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement more complicated shape functions. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and how to account for non-thermal atmospheric support energy.
