@@ -47,20 +47,20 @@ We will demonstrate how to do that by implementing the simplified cosmological p
 $$
 \alpha(r) = 1.7 \left( \frac{2r/r_\mathrm{max}}{1+r/r_\mathrm{max}} \right)
 $$
-Its slope if very shallow slope $(\alpha \ll 1)$ at small radii. It steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential. And it converges toward $\alpha = 3.4$ at large radii.
+Its slope is very shallow $(\alpha \ll 1)$ at small radii. It steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential. And it converges toward $\alpha = 3.4$ at large radii.
 
-To prepare for using that pressure profile in conjunction with an NFW potential well, we will rewrite it as a function of $x = r / r_\mathrm{s}$:
+To prepare for using that shape function in conjunction with an NFW potential well, we will rewrite it as a function of $x = r / r_\mathrm{s}$:
 $$
 \alpha(x) = \frac {1.59 x} {1 + 0.468 x} 
 $$
-The following cell defines that function and can be replaced with a different user-defined function:
+The following cell defines that shape function and can be replaced with a different user-defined shape function:
 
 ```python
 def alpha(x):
     return (1.59*x)/(1 + 0.468*x)
 ```
 
-Because $\alpha(x)$ is not constant, a numerical integration is needed to determine the the dimensionless pressure profile function: 
+Because $\alpha(x)$ is not constant, a numerical integration is needed to determine the dimensionless pressure profile function: 
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
@@ -79,6 +79,43 @@ def f_P(x):
 To check the result, this cell makes a plot showing $f_P(x)$:
 
 ```python
+def update_alpha(alpha=1.5):
+    # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
+    x_values = np.logspace(-1.5, 2, 50)
+    y1_values = [F(x,alpha) for x in x_values]
+    y2_values = [1/I(x,alpha) for x in x_values]
+
+    # Choose a font
+    gfont = {'fontname':'georgia'}
+    plt.rcParams['font.family'] = 'georgia' 
+    plt.rcParams['font.size'] = 12 
+
+    # Specify a figure size
+    fig, ax1 = plt.subplots(figsize=(8, 6))
+
+    # Plot x_CGM as a function of F(x_CGM) using a solid blue-violet line
+    ax1.plot(y1_values, x_values, color='blueviolet', label='$x_{\mathrm{CGM}}$')
+    ax1.set_xscale('linear')
+    ax1.set_yscale('log')
+    ax1.set_xlabel(r'$E_\mathrm{CGM} / M_\mathrm{CGM} v_{\varphi}^2$', fontsize=12)
+    ax1.set_ylabel(r'$x_\mathrm{CGM} = r_\mathrm{CGM} / r_\mathrm{s}$', fontsize=12)
+    ax1.set_ylim(10**-1.5, 10**2)
+    ax1.grid(True, linestyle='--', linewidth=0.5)
+
+    # Plot 1/I(x_CGM) as a function of F(x_CGM) using a dashed orange line
+    ax2 = ax1.twinx()
+    ax2.plot(y1_values, y2_values, color='orange', linestyle='--', label='$1/I(x)$')
+    ax2.set_ylabel('$1/I(x_\mathrm{CGM}) \propto P(r_\mathrm{s})$', fontsize=12)
+    ax2.set_yscale('log')
+
+    # Add a legend
+    lines_1, labels_1 = ax1.get_legend_handles_labels()
+    lines_2, labels_2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
+
+    # Add a title and show the plot
+    plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
+    plt.show()
 
 ```
 
