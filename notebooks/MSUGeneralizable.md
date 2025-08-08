@@ -30,7 +30,7 @@ nav_exclude: true
 
 The Python notebook cells on this page demonstrate how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into a Python notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
 
-Before executing the following cells, import these items:  
+Before executing the cells that follow, import these items:  
 
 ```python
 import numpy as np
@@ -39,33 +39,30 @@ import matplotlib.pyplot as plt
 from ipywidgets import interact, FloatSlider
 ```
 
-## General Pressure Profile
+## User-Defined Pressure Profiles
 
-To generalize the atmosphere's pressure profile, a user needs to specify its shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
+To implement a pressure profile that is not a simple power law, an **ExpCGM** user needs to specify its shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
 
-This example implements a shape function describing the simplified cosmological profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page:
+We will demonstrate how to do that by implementing the simplified cosmological profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page:
 $$
 \alpha(r) = 1.7 \left( \frac{2r/r_\mathrm{max}}{1+r/r_\mathrm{max}} \right)
 $$
-It has a very shallow slope $(\alpha \ll 1)$ at small radii, steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential, and converges toward $\alpha = 3.4$ at large radii.
+Its slope if very shallow slope $(\alpha \ll 1)$ at small radii. It steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential. And it converges toward $\alpha = 3.4$ at large radii.
 
-```python
-rmax = 2.16
-
-A_NFW = 4.625
-eps = 10**(-4)
-
-def alpha(x):
-    return (3.4*x)/(rmax + x)
-```
-
-We now have to use the integral form of $f_P(x)$ since alpha is not constant. 
+To prepare for using that pressure profile in conjunction with an NFW potential well, we will rewrite it as a function of $x = r / r_\mathrm{s}$:
+$$
+\alpha(x) = \frac {1.59 x} {1 + 0.486 x} 
+$$
+When $\alpha(x)$ is not constant, a numerical integration is needed to determine the  now have to use the integral form of $f_P(x)$ since alpha is not constant. 
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
 
+Executing this cell integrates $\alpha (x)$ over $\ln x$ to obtain a dimensionless pressure profile function $f_P(x)$ that is normalized to unity at $r = r_\mathrm{x}$:
 
 ```python
+eps = 10**(-4)
+
 def integrandf_P(t):
     return alpha(t) / t
 
@@ -74,6 +71,26 @@ def f_P(x):
     return np.exp(-resultf_P)
 
 ```
+
+To check the result, this cell makes a plot showing $f_P(x)$:
+
+## User-Defined Potential Wells
+
+```python
+A_NFW = 4.625
+
+def alpha(x):
+    return (3.4*x)/(rmax + x)
+```
+
+To check the result, this cell makes a plot showing $v_\mathrm{c}(x)$:
+
+
+
+
+
+
+
 
 We also redefine the energy integrals so they have $\alpha(x)$ inside them. We can also define the $v_c^2(x)$ and $\varphi(x)$ functions the same way again so each section of the notebook is self-contained.
 
