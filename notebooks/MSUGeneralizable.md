@@ -24,6 +24,14 @@ nav_exclude: true
    </script>
 </head>
 
+# MSU Generalizable Notebook
+
+*Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
+
+These Python notebook cells present extensions of the **ExpCGM** implementation on the [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) page...
+
+... To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
+
 ## General Pressure Profile in an NFW Potential
 
 In this section we use a shape function $\alpha(x)$ that varies with radius. The simplified cosmological profile 
