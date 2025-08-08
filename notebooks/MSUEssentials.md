@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-These Python notebook cells present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on various assumptions about the atmosphere's pressure profile and the gravitational potential well confining it. To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
+The Python notebook cells on this page present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on simple assumptions about the atmosphere's pressure profile and the gravitational potential well confining it. To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper left corner of the cell and click on the clipboard icon that appears.
 
 Before executing the rest of the cells, you will want to import a few items:
 
@@ -42,35 +42,35 @@ from ipywidgets import interact, FloatSlider
 ## Power‑Law Atmosphere in an NFW Potential
 As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **ExpCGM** atmosphere models begin with a ***shape function*** that describes the shape of a galactic atmosphere's radial pressure profile:
 $$
-\alpha(r) = -\frac{d\ln P}{d\ln r} \; \; .
+\alpha(r) = -\frac{d\ln P}{d\ln r}
 $$
-We will begin with the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. Farther down the page is an example in which $\alpha$ changes with radius.
+Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable](MSUGeneralizable) page demonstrates how to implement more complicated shape functions.
 
-This initial model also assumes an NFW gravitational potential:
+This simple **ExpCGM** model also assumes an NFW gravitational potential:
 $$
-\varphi_{\rm NFW} (x) = A_{\rm NFW} \, v_\varphi^2 \, \left[ 1 - \frac {\ln (1+x)}{x} \right] \; \; .
+\varphi_{\rm NFW} (x) = A_{\rm NFW} \, v_\varphi^2 \, \left[ 1 - \frac {\ln (1+x)}{x} \right]
 $$
-Here, $x = r/r_{\rm s}$ represents radius in units of the NFW profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen to put the potential's zero point at $r = 0$.
+Here, $x = r/r_{\rm s}$ represents radius in units of the NFW profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen the potential's zero point to be at $r = 0$.
 
 We will now set the values of some model parameters:
 
 ```python
-alpha = 1.5       # constant power-law slope for pressure profile
-A_NFW = 4.625     # Normalization constant for NFW potential well
+alpha = 1.5       # constant power-law slope for the pressure profile
+A_NFW = 4.625     # Normalization constant for the NFW potential well
 eps = 10**(-4)    # Lower limit on x=r/r_s for numerical integrations
 ```
 
 ### Pressure Profile and Circular Velocity Profile
 
-In general, the dimensionless pressure-profile function $f_P$ is obtained by integrating the shape function $\alpha (x)$ over $\ln x$. However, no integration is necessary for constant $\alpha$. We can simply define the pressure-profile function to be 
+In general, a dimensionless pressure-profile function $f_P$ is obtained by integrating the shape function $\alpha (x)$ over $\ln x$. However, no integration is necessary for constant $\alpha$. We can simply define the pressure-profile function to be 
 $$
-f_P(r) = \left(\frac{r}{r_0}\right)^{-\alpha} \; \; ,
+f_P(r) = \left(\frac{r}{r_0}\right)^{-\alpha} 
 $$
 where $r_0$ is the radius at which $f_P$ is normalized to unity.
 
-The NFW potential function is given above, but we will also be using a circular velocity profile function obtained by differentating $\varphi(x)$ by $x$ and then multiplying the result by $x$:
+The NFW potential function is given above, but we will also be using a circular velocity profile function obtained by differentating $\varphi(x)$ with repect to $x$ and then multiplying the result by $x$:
 $$
-v_c^2(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ \frac{\ln(1+x)}{x} - \frac{1}{1+x} \right] \; \; .
+v_c^2(x) = A_{\rm NFW}\, v_\varphi^2\, \left[ \frac{\ln(1+x)}{x} - \frac{1}{1+x} \right] 
 $$
 
 This cell defines three functions determining how those profiles depend on $x = r / r_{\rm s}$:
@@ -107,7 +107,7 @@ J_{\rm th}(x) = \frac{3}{2} \int_0^x f_P(x)\,x^2\,dx
 \; \; \; \; \text{(cumulative thermal energy)} 
 $$
 
-In this example, we are modeling an atmosphere supported entirely by thermal energy $(f_{\rm th} = 1)$ and so we do not need an integral that calculates a non-thermal energy profile.
+In this example, we are modeling an atmosphere supported entirely by thermal energy $(f_{\rm th} = 1)$ and so we do not need an integral that calculates cumulative non-thermal energy.
 
 The total specific energy of this model atmosphere is
 $$
@@ -120,7 +120,7 @@ $$
 
 This cell defines functions that compute the necessary dimensionless mass and energy integrals:
 ```python
-# To compute each mass and energy integral we first define a function giving the integrand, then perform the integration
+# For each integral we first define a function providing the integrand, then do the integration
 
 def integrandI(t,alpha): 
     return f_P(t,alpha) * t**2 / vc2(t)
@@ -147,9 +147,9 @@ def F(x,alpha):
 
 ### Plotting Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
-We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. First, we compute the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then, we invert that dependence to obtain the desired plot. 
+We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
-The plot also shows how the pressure-profile normalization $P_0$ at $r = r_{\rm s}$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands: $P_0$ is simply proportional to $\propto 1/I(x_{\rm CGM})$.
+The plot also shows how the pressure-profile normalization $P_0$ factor, which is the pressure at $r = r_{\rm s}$ in this example, declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is simply proportional to $\propto 1/I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
 ```python
 # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
@@ -196,7 +196,7 @@ plt.show()
 
 ### Adjustable Power-Law Slope
 
-To change the power-law slope of the pressure profile, you can change the value of $\alpha$ and execute the plotting code again, or you can use an interactive version of the plotting code with a slider that determines $\alpha$
+To change the power-law slope of the pressure profile, you can type in a different value of $\alpha$ and execute the plotting code again, or you can use an interactive version of the plotting code with a slider that determines $\alpha$.
 
 This cell defines a function called *update_alpha* that updates the plot when the slider moves:
 
@@ -252,5 +252,8 @@ interact(update_alpha, alpha=alpha_slider);
 
 ```
 
-Adjusting the slider shows that increasing $\alpha$ increases the radius of an atmosphere with a given specific energy. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. Therefore, a greater proportion of its specific energy must be gravitational, meaning that more of its mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile.
+Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates how changing to $\alpha = 2$ affects the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$:
+
+Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
+Along with demonstrating how to implement more complicated shape functions, the [MSU Generalizable](MSUGeneralizable) page also demonstrates how to implement alternative potential wells, including ones with a central galaxy.
