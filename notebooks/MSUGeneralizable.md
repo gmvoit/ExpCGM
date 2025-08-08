@@ -129,7 +129,7 @@ $$
   \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
 $$
 
-This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$:
+This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$ or $v_\varphi$:
 
 ```python
 def phi_gal(x,x_H,f_H):
@@ -138,9 +138,43 @@ def phi_gal(x,x_H,f_H):
 def vc2_gal(x,x_H,f_H):
     return 4 * f_H**2 * x_H * x / (x + x_H)**2
 
+def phi(x,x_H,f_H):
+    return phi_NFW(x) + phi_gal(x,x_H,f_H)
+
+def vc2(x,x_H,f_H):
+    return vc2_NFW(x) + vc2_gal(x,x_H,f_H)
+
+def vc(x,x_H,f_H):
+    return np.sqrt(vc2(x,x_H,f_H))
 ```
 
-To check the result, this cell makes a plot showing $v_\mathrm{c}(x)$:
+To check the result, this cell makes a plot showing $v_\mathrm{c}(x)/v_\varphi$ for $x_H = 0.1$ and $f_H = 1.0$:
+
+```python
+# Set the parameters of the Hernquist model 
+x_H = 0.1
+f_H = 1.0
+
+# Specify the domain of x and determine v_c
+x_values = np.logspace(-1.5, 2, 50)
+vc_values = [vc(x,x_H,f_H) for x in x_values] 
+
+# Choose a font
+gfont = {'fontname':'georgia'}
+plt.rcParams['font.family'] = 'georgia' 
+plt.rcParams['font.size'] = 12 
+
+# Make the plot
+plt.plot(x_values, vc_values, color='blueviolet')
+plt.xscale('log')
+plt.yscale('linear')
+plt.xlabel(r'$x = r / r_\mathrm{s}$', fontsize=12)
+plt.ylabel(r'$v_\mathrm{c} / v_\varphi$', fontsize=12)
+
+plt.title('Dimensionless Circular Velocity Profile', **gfont)
+plt.show()
+```
+![png](MSUGeneralizable_files/vc_dimensionless.png)
 
 ## Cumulative Mass and Energy Integrals
 
