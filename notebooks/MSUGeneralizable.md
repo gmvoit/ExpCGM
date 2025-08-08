@@ -79,44 +79,23 @@ def f_P(x):
 To check the result, this cell makes a plot showing $f_P(x)$:
 
 ```python
-def update_alpha(alpha=1.5):
-    # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
-    x_values = np.logspace(-1.5, 2, 50)
-    y1_values = [F(x,alpha) for x in x_values]
-    y2_values = [1/I(x,alpha) for x in x_values]
+# Specify the domain of x and determine f_P(x)
+x_values = np.logspace(-1.5, 2, 50)
+y_values = [f_P(x) for x in x_values]
 
-    # Choose a font
-    gfont = {'fontname':'georgia'}
-    plt.rcParams['font.family'] = 'georgia' 
-    plt.rcParams['font.size'] = 12 
+# Choose a font
+gfont = {'fontname':'georgia'}
+plt.rcParams['font.family'] = 'georgia' 
+plt.rcParams['font.size'] = 12 
 
-    # Specify a figure size
-    fig, ax1 = plt.subplots(figsize=(8, 6))
+plt.plot(y1_values, x_values, color='blueviolet', label='$x_{\\text{CGM}}$')
+plt.xscale('linear')
+plt.yscale('log')
+plt.xlabel(r'$x = r / r_\mathrm{s}$', fontsize=12)
+plt.ylabel(r'$f_P = P(r)/P(r_\mathrm{s})', fontsize=12)
 
-    # Plot x_CGM as a function of F(x_CGM) using a solid blue-violet line
-    ax1.plot(y1_values, x_values, color='blueviolet', label='$x_{\mathrm{CGM}}$')
-    ax1.set_xscale('linear')
-    ax1.set_yscale('log')
-    ax1.set_xlabel(r'$E_\mathrm{CGM} / M_\mathrm{CGM} v_{\varphi}^2$', fontsize=12)
-    ax1.set_ylabel(r'$x_\mathrm{CGM} = r_\mathrm{CGM} / r_\mathrm{s}$', fontsize=12)
-    ax1.set_ylim(10**-1.5, 10**2)
-    ax1.grid(True, linestyle='--', linewidth=0.5)
-
-    # Plot 1/I(x_CGM) as a function of F(x_CGM) using a dashed orange line
-    ax2 = ax1.twinx()
-    ax2.plot(y1_values, y2_values, color='orange', linestyle='--', label='$1/I(x)$')
-    ax2.set_ylabel('$1/I(x_\mathrm{CGM}) \propto P(r_\mathrm{s})$', fontsize=12)
-    ax2.set_yscale('log')
-
-    # Add a legend
-    lines_1, labels_1 = ax1.get_legend_handles_labels()
-    lines_2, labels_2 = ax2.get_legend_handles_labels()
-    ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
-
-    # Add a title and show the plot
-    plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
-    plt.show()
-
+plt.title('Dimensionless Pressure Profile', **gfont)
+plt.show()
 ```
 
 ## User-Defined Potential Wells
