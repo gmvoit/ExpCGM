@@ -10,11 +10,13 @@ This section of the **ExpCGM** website presents notebooks contributed by the fra
 
 ## MSU Undergraduate Notebooks
 
+{: .warning}
+The notebooks currently in this section of the website are prototypes that are in the process of being corrected and refined.
+
 These notebooks illustrating the Essential elements of the framework were developed by MSU students Doruk Yaldiz and Jazzmin Partridge:
 
 * [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) shows how to use Python to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page illustrating the relationship between atmospheric radius and atmospheric specific energy in **ExpCGM**.
 
 * [MSU Generalizable](/ExpCGM/notebooks/MSUGeneralizable) shows how to extend the Python code in the [MSU Essentials](/ExpCGM/notebooks/MSUEssentials) notebook, so that user-defined pressure profiles and potential wells can be incorporated into **ExpCGM**.
 
-{: .warning}
-The notebooks currently in this section of the website are prototypes that are in the process of being corrected and refined.
+
