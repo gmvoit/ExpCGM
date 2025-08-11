@@ -207,8 +207,14 @@ def v_phi(M_halo,z,c_halo,Delta):
   # Convert M_halo to grams
   M_halo_grams = M_halo * MSun
 
-  # Determine v_c / v_phi at r_halo
-  vc_rhalo 
+  # Determine v_c  at r_halo
+  vc_rhalo_cgs = ( Delta / 2 )**(1/6) * ( G * Mhalo_grams * Hz )**(1/3)
+
+  # Determine v_phi / v_c(r_halo) and return v_phi in km/s
+  x_max = 2.136
+  vc_ratio = vc(x_max) / vc(c_halo)
+  return ( vc_rhalo_cgs / 1e5 ) * vc_ratio
+  
 ```
 
 ## Cumulative Mass and Energy Integrals
