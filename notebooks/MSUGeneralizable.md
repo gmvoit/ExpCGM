@@ -115,7 +115,6 @@ The default choice for a halo potential well in **ExpCGM** is an NFW potential w
 
 ```python
 A_NFW = 4.625      # Normalization constant for the NFW potential well
-eps = 10**(-4)     # Lower limit on x=r/r_s for numerical integration
 
 def vc2_NFW(x):
     return np.log(1+x) / x - 1 / (1+x)
@@ -271,9 +270,9 @@ plt.show()
 
 ![png](MSUGeneralizable_files/vc_vs_r.png)
 
-
-
 Multiplying $v_\mathrm{c}^2(r)$ by $\mu m_p$ and dividing by $\alpha(r)$ then gives the model's hydrostatic temperature profile:
+
+![png](MSUGeneralizable_files/Tprofile.png)
 
 
 
@@ -284,23 +283,26 @@ We also redefine the energy integrals so they have $\alpha(x)$ inside them. We c
 
 ```python
 
+# Set a lower limit on x=r/r_s for numerical integrations
+eps = 10**(-4)     
+
+# Integrate to obtain cumulative mass profile
 def integrandI(t):
     return alpha(t) * f_P(t) * t**2 / vc2(t)
-
 def I(x):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return 1 / A_NFW * resultI
 
+# Integrate to obtain cumulative gravitational energy profile
 def integrandJphi(t):
     return alpha(t) * f_P(t) * phi(t) / vc2(t) * t**2
-
 def Jphi(x):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return resultJphi
 
+# Integrate to obtain cumulative thermal energy profile
 def integrandJth(t):
     return f_P(t) * t**2
-
 def Jth(x):
     resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
     return 3 / 2 * resultJth
