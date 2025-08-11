@@ -47,8 +47,8 @@ We will demonstrate how to do that by implementing a generalized NFW profile, as
 $$
 \alpha(x) = - \alpha_\mathrm{in} 
             - (\alpha_\mathrm{out} - \alpha_\mathrm{in} )
-              \frac{(x/x_\alpha)^{\alpha_\mathrm{tr}}}
-                  {1+(x/x_\alpha)^{\alpha_\mathrm{tr}}}
+              \left[ \frac{(x/x_\alpha)^{\alpha_\mathrm{tr}}}
+                       {1+(x/x_\alpha)^{\alpha_\mathrm{tr}}} \right]
 $$
 Its power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $x_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
 
