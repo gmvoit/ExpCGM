@@ -265,7 +265,7 @@ plt.savefig('vc_vs_r.pdf')
 plt.show()
 ```
 
-![png](MSUGeneralizable_files/vc_vs_r.pdf)
+![png](MSUGeneralizable_files/vc_vs_r.png)
 
 
 
