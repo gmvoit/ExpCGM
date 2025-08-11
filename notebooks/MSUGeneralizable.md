@@ -126,7 +126,6 @@ Here, we will extend the potential well model by adding the potential well of a 
 
 $$
 \varphi_\mathrm{H} = 4 v_\mathrm{H}^2 
-  \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
 $$
 
 This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$ or $v_\varphi$:
