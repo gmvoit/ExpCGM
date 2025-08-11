@@ -194,12 +194,21 @@ The following cell defines a function that returns $v_\varphi$ (in units of kilo
 
 ```python
 def v_phi(M_halo,z,c_halo,Delta):
+
   # Specify some constants
   G = 6.67e-8     # gravitational constant in cgs units
   H0 = 1./4.4e17  # current Hubble constant in inverse seconds
   MSun = 2.e33    # solar mass in grams
   Omat = 0.3      # cosmological matter density parameter
 
+  # Determine H(z)
+  Hz = H0 * np.sqrt( Omat * (1+z)**3 + (1 - Omat) )
+
+  # Convert M_halo to grams
+  M_halo_grams = M_halo * MSun
+
+  # Determine v_c / v_phi at r_halo
+  vc_rhalo 
 ```
 
 ## Cumulative Mass and Energy Integrals
