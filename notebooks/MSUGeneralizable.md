@@ -43,24 +43,24 @@ from ipywidgets import interact, FloatSlider
 
 To implement a pressure profile that is not a simple power law, an **ExpCGM** user needs to specify the pressure profile's shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
 
-We will demonstrate how to do that by implementing the generalized NFW profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page. It has the shape function
+We will demonstrate how to do that by implementing a generalized NFW profile, as discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page. It has the shape function
 $$
-\alpha(r) = - \alpha_\mathrm{in} 
+\alpha(x) = - \alpha_\mathrm{in} 
             - (\alpha_\mathrm{out} - \alpha_\mathrm{in} )
-              \frac{(x/x_\mathrm{tr})^{\alpha_\mathrm{tr}}}
-                  {1+(x/x_\mathrm{tr})^{\alpha_\mathrm{tr}}}
+              \frac{(x/x_\alpha)^{\alpha_\mathrm{tr}}}
+                  {1+(x/x_\alpha)^{\alpha_\mathrm{tr}}}
 $$
-Its power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $r_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
+Its power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $x_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
 
-The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\mathrm{tr} = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by replacing this form of $\alpha (x)$ with a different one:
+The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\alpha = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by replacing this form of $\alpha (x)$ with a different one:
 
 ```python
 def alpha(x):
     alpha_in = 1.0
     alpha_out = 3.4
     alpha_tr = 1.0
-    x_tr = 2.16
-    y = ( x / x_tr )**alpha_tr
+    x_alpha = 2.16
+    y = ( x / x_alpha )**alpha_tr
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 ```
 
