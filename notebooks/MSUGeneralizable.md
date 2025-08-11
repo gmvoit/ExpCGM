@@ -265,11 +265,11 @@ plt.savefig('vc_vs_r.pdf')
 plt.show()
 ```
 
-![png](MSUGeneralizable_files/vc_dimensionless.png)
+![png](MSUGeneralizable_files/vc_vs_r.pdf)
 
 
 
-Multiplying $v_\mathrm^2(r)$ by $\mu m_p$ and dividing by $\alpha(r)$ then gives the model's hydrostatic temperature profile:
+Multiplying $v_\mathrm{c}^2(r)$ by $\mu m_p$ and dividing by $\alpha(r)$ then gives the model's hydrostatic temperature profile:
 
 
 
