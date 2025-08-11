@@ -220,7 +220,7 @@ def v_phi_NFW(v_halo,c_halo):
   return v_halo / np.sqrt( vc2_NFW(c_halo) )
 ```
 
-Executing this cell makes a plot showing the normalized circular velocity profile:
+Once that function is defined, executing this cell makes a plot showing the normalized circular velocity profile:
 
 ```python
 # Set the parameters of the NFW halo model 
@@ -232,12 +232,20 @@ Delta_halo = 200
 # Determine v_phi for the NFW profile
 v_phi = v_phi_NFW(vhalo_kms(M_halo,z_halo,Delta_halo),c_halo)
 
+# Determine r_halo for the NFW model
+G = 6.67e-8
+cm_per_kpc = 3.08e21
+g_per_MSun = 2e33
+rhalo_cm = G * M_halo * g_per_MSun / (vhalo_kms(M_halo,z_halo,Delta_halo) * 1e5)**2
+rhalo_kpc = rhalo_cm / cm_per_kpc
+
 # Set the parameters of the Hernquist model 
 x_H = 0.1
 f_H = 1.0
 
-# Specify the domain of x and determine v_c
+# Specify the domain of x and determine r in kpc and v_c in km/s
 x_values = np.logspace(-1.5, 2, 50)
+r_values = [x * rhalo_kpc / c_halo for x in x_values]
 vc_values = [v_phi * vc(x,x_H,f_H) for x in x_values] 
 
 # Choose a font
@@ -246,15 +254,23 @@ plt.rcParams['font.family'] = 'georgia'
 plt.rcParams['font.size'] = 12 
 
 # Make the plot
-plt.plot(x_values, vc_values, color='blueviolet')
+plt.plot(r_values, vc_values, color='blueviolet')
 plt.xscale('log')
 plt.yscale('linear')
-plt.xlabel(r'$x = r / r_\mathrm{s}$', fontsize=12)
+plt.xlabel(r'$r \; \; (kpc)$', fontsize=12)
 plt.ylabel(r'$v_\mathrm{c} \; \;  (km/s)$', fontsize=12)
 
 plt.title('Normalized Circular Velocity Profile', **gfont)
+plt.savefig('vc_vs_r.pdf')
 plt.show()
 ```
+
+![png](MSUGeneralizable_files/vc_dimensionless.png)
+
+
+
+Multiplying $v_\mathrm^2(r)$ by $\mu m_p$ and dividing by $\alpha(r)$ then gives the model's hydrostatic temperature profile:
+
 
 
 ## Cumulative Mass and Energy Integrals
@@ -311,52 +327,8 @@ plt.grid(True, linestyle='--', linewidth=0.5)
 plt.show()
 ```
 
-
-    
 ![png](Notebook_1_files/Notebook_1_16_0.png)
-    
 
-
-## General Potential Well
-
-In addition to the NFW profile, we can add a central galaxy to the potential using the Hernquist model:
-$$
-v_{\rm H}^2(r) = \frac{GM_*r}{(r+r_{\rm H})^2}
-$$
-Most central galaxies have a maximum circular velocity similar to the maximum circular velocity $v_\varphi$ of the surrounding halo. 
-
-Therefore we assume that $\max(v_{\rm H}) = v_\varphi$, so $r_{\rm H} = GM_*/4v_\varphi^2$.
-
-Using this, and dividing by the scale radius, we get the circular velocity profile:
-$$
-v_{\rm H}^2(x) =  \frac{4 v_\varphi^2 (r_{\rm H}/r_0)x}{(x + r_{\rm H}/r_0)^2}
-$$
-We use the scale radius $r_H=0.2 r_0$, and combine this with the NFW profile:
-$$
-v_c^2(x) = v_{\rm NFW}^2(x) + v_{\rm H}^2(x)
-$$
-
-
-```python
-A_NFW = 4.625
-eps = 10**(-4)
-rmax = 2.163
-
-r_H = 0.2 # The Hernquist radius where v_c is maximized in the Hernquist model, as a fraction of r_0
-
-
-# Defining the NFW and Hernquist models seperately, then adding them together
-# Once again we can ignore the v_phi term as it cancels out, and keep the quantities dimensionless.
-
-def v2_NFW(x):
-    return A_NFW * (np.log(1+x) / x - 1 / (1+x))
-
-def v2_H(x):
-    return 4 * r_H * x / (x + r_H)**2
-
-def vc2(x):
-    return v2_NFW(x) + v2_H(x)
-```
 
 
 ```python
@@ -412,13 +384,9 @@ def Jth(x):
 def F(x):
     return (Jth(x)+Jphi(x)) / I(x)
 ```
-
-
     
 ![png](Notebook_1_files/Notebook_1_19_0.png)
     
-
-
 
 ```python
 # Plotting the results
@@ -436,27 +404,6 @@ plt.xscale('linear')
 plt.yscale('log')
 plt.xlabel(r'$\mathrm{E}_{\mathrm{CGM}} \ / \ \mathrm{M}_{\mathrm{CGM}} \ \mathrm{v}_{\varphi}$', fontsize=12)
 plt.ylabel(r'$x_{\mathrm{CGM}} \ = \ r_\mathrm{CGM} \ / \ r_s$', fontsize=12)
-plt.grid(True, linestyle='--', linewidth=0.5)
-plt.show()
-```
-
-Now that we have the central galaxy as well, we can plot the rotation curve being used as a reference.
-
-
-```python
-x_values_2 = np.logspace(-5, 0.7, 100)
-v_c_values = [np.sqrt(vc2(x))/1e3 for x in x_values_2]
-
-gfont = {'fontname':'georgia'}
-plt.rcParams['font.family'] = 'georgia' 
-plt.rcParams['font.size'] = 12 
-plt.figure(figsize=(8, 6))
-plt.plot(x_values_2, v_c_values, color='blueviolet')
-plt.xscale('linear')
-plt.yscale('linear')
-plt.title('Velocity Profile', **gfont)
-plt.xlabel(r'$x \ = \ r \ / \ r_s$', fontsize=12)
-plt.ylabel(r'$v_c$ (km/s)', fontsize=12)
 plt.grid(True, linestyle='--', linewidth=0.5)
 plt.show()
 ```
