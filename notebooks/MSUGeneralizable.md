@@ -41,18 +41,18 @@ from ipywidgets import interact, FloatSlider
 
 ## User-Defined Pressure Profiles
 
-To implement a pressure profile that is not a simple power law, an **ExpCGM** user needs to specify its shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
+To implement a pressure profile that is not a simple power law, an **ExpCGM** user needs to specify the pressure profile's shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
 
-We will demonstrate how to do that by implementing the generalized NFW profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page, which has the shape function
+We will demonstrate how to do that by implementing the generalized NFW profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page. It has the shape function
 $$
 \alpha(r) = - \alpha_\mathrm{in} 
             - (\alpha_\mathrm{out} - \alpha_\mathrm{in} )
-              \frac{(x/x_\mathrm{tr})^\alpha_\mathrm{tr}}
-                  {1+(x/x_\mathrm{tr})^\alpha_\mathrm{tr}}
+              \frac{(x/x_\mathrm{tr})^{\alpha_\mathrm{tr}}}
+                  {1+(x/x_\mathrm{tr})^{\alpha_\mathrm{tr}}}
 $$
-Its power-law slope approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $r_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
+Its power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $r_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
 
-The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 2.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\mathrm{tr} = 2.16$. Users can customize the pressure profile by adjusting these parameters or by replacing this $\alpha (x)$ different one:
+The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\mathrm{tr} = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by replacing this form of $\alpha (x)$ with a different one:
 
 ```python
 def alpha(x):
