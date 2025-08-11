@@ -120,14 +120,14 @@ def phi_NFW(x):
     return 1- np.log(1+x)/x
 ```
 
-Later, we will multiply each of these functions by $v_\varphi^2$, the square of the potential's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
+Later, we will multiply each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
 
-This example extends the NFW potential well model by adding the potential well of a central galaxy with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
+To illustrate how to customize the potential well, we will extend the NFW halo model by adding a central galaxy with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
 $$
 \varphi_\mathrm{H} = 4 v_\mathrm{H}^2 \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
 $$
 
-This cell provides the dimensionless functions that give the appropriate dimensional quantities when multiplied by $v_\varphi^2$ or $v_\varphi$:
+The dimensionless functions in this cell are defined so that they give the appropriate dimensional quantities when multiplied by $v_\varphi^2$ or $v_\varphi$:
 
 ```python
 def phi_gal(x,x_H,f_H):
@@ -178,7 +178,7 @@ plt.show()
 
 In the **ExpCGM** framework, the temperature profile of an atmosphere fully supported by thermal pressure depends only on $\alpha(x)$ and $v_c(x)$: 
 $$ 
-kT(x) = \frac {\mu m_p v_\mathrm{c}^2 (x)} {\alpha(x) 
+kT(x) = \frac { \mu m_p v_\mathrm{c}^2 (x) } { \alpha(x) }
 $$
 However, the normalization factor $v_\varphi$ of the circular velocity profile depends on the total mass within a particular radius.
 
