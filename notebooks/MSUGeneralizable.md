@@ -47,7 +47,7 @@ We will demonstrate how to do that by implementing the simplified cosmological p
 $$
 \alpha(r) = 1.7 \left( \frac{2r/r_\mathrm{max}}{1+r/r_\mathrm{max}} \right)
 $$
-Its slope is very shallow $(\alpha \ll 1)$ at small radii. It steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential. And it converges toward $\alpha = 3.4$ at large radii.
+Its slope is very shallow $(\alpha \ll 1)$ at small radii. It steepens to $\alpha \approx 1.7$ near the radius $r_\mathrm{max} = 2.16\, r_s$ at which $v_c^2(r)$ peaks in an NFW gravitational potential. At large radii it converges toward $\alpha = 3.4$.
 
 To prepare for using that shape function in conjunction with an NFW potential well, we will rewrite it as a function of $x = r / r_\mathrm{s}$:
 $$
@@ -60,7 +60,7 @@ def alpha(x):
     return (1.59*x)/(1 + 0.468*x)
 ```
 
-Because $\alpha(x)$ is not constant, a numerical integration is needed to determine the dimensionless pressure profile function: 
+A numerical integration is now needed to determine the dimensionless pressure profile function because $\alpha(x)$ is not constant: 
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
@@ -103,7 +103,7 @@ In the **ExpCGM** framework, a pressure profile's normalization depends on the a
 $$
 P_0 = P(r_\mathrm{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} {I(x_\mathrm{CGM})} 
 $$
-As explained on the [Essentials](/ExpCGM/descriptions/Essentials) page, $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$.
+The function $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, as explained on the [Essentials](/ExpCGM/descriptions/Essentials) page, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$.
 
 ## User-Defined Potential Wells
 
@@ -180,18 +180,18 @@ In the **ExpCGM** framework, the temperature profile of an atmosphere fully supp
 $$ 
 kT(x) = \frac { \mu m_p v_\mathrm{c}^2 (x) } { \alpha(x) }
 $$
-However, the normalization factor $v_\varphi$ of the circular velocity profile depends on the total mass within a particular radius.
+However, the normalization factor $v_\varphi$ of the circular velocity profile depends on the total mass $M_\mathrm{halo}$ within a bounding radius $r_\mathrm{halo}$.
 
-To calculate the normalization factor, an **ExpCGM** user needs to specify a halo mass $M_\mathrm{halo}$, a cosmological redshift $z$, a halo concentration factor $c_\mathrm{halo} = r_\mathrm{halo} / r_\mathrm{s}$, and the density contrast factor $\Delta_\mathrm{halo}$ relating the mean mass density within $r_\mathrm{halo}$ to the universe's critical density at redshift $z$. The formula determining the normalization factor is
+The usual procedure for calculating the normalization factor is to define the halo's radius so that the mean matter density within $r_\mathrm{halo}$ is $\Delta_\mathrm{halo}$ times the universe's critical density at the halo's redshift $z$. Then the circular velocity at $r_\mathrm{halo}$ is 
 $$
 v_\mathrm{c}(r_\mathrm{halo}) 
   = \left( \frac {\Delta_\mathrm{halo}} {2} \right)^{1/6}
     \left[ G M_\mathrm{halo} H(z) \right]^{1/3}
 $$
-The following cell defines a function that returns $v_\varphi$ (in units of kilometers per second) when given $z$, $c_\mathrm{halo}$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ (in units of solar mass):
+The following cell defines a function that returns $v_\mathrm{halo}$ in units of kilometers per second when given $z$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass:
 
 ```python
-def v_phi(M_halo,z,c_halo,Delta):
+def vhalo_kms(M_halo,z,Delta):
 
   # Specify some constants
   G = 6.67e-8     # gravitational constant in cgs units
@@ -208,12 +208,54 @@ def v_phi(M_halo,z,c_halo,Delta):
   # Determine v_c  at r_halo
   vc_rhalo_cgs = ( Delta / 2 )**(1/6) * ( G * Mhalo_grams * Hz )**(1/3)
 
-  # Determine v_phi / v_c(r_halo) and return v_phi in km/s
-  x_max = 2.136
-  vc_ratio = vc(x_max) / vc(c_halo)
-  return ( vc_rhalo_cgs / 1e5 ) * vc_ratio
+  # Return vc(rhalo) in km/s
+  return vc_rhalo_cgs / 1e5
   
 ```
+
+To obtain the $v_\mathrm{c}$ normalization factor for an NFW halo model, the halo's the concentration factor $c_\mathrm{halo} = r_\mathrm{halo} / r_\mathrm{s}$ must be specified. The next cell defines a function that computes $v_\varphi$ when given $v_\mathrm{halo}$ and $c_\mathrm{halo}$:
+
+```python
+def v_phi_NFW(v_halo,c_halo):
+  return v_halo / np.sqrt( vc2_NFW(c_halo) )
+```
+
+Executing this cell makes a plot showing the normalized circular velocity profile:
+
+```python
+# Set the parameters of the NFW halo model 
+M_halo = 1e12
+z_halo = 0.0
+c_halo = 10
+Delta_halo = 200
+
+# Determine v_phi for the NFW profile
+v_phi = v_phi_NFW(vhalo_kms(M_halo,z_halo,Delta_halo),c_halo)
+
+# Set the parameters of the Hernquist model 
+x_H = 0.1
+f_H = 1.0
+
+# Specify the domain of x and determine v_c
+x_values = np.logspace(-1.5, 2, 50)
+vc_values = [v_phi * vc(x,x_H,f_H) for x in x_values] 
+
+# Choose a font
+gfont = {'fontname':'georgia'}
+plt.rcParams['font.family'] = 'georgia' 
+plt.rcParams['font.size'] = 12 
+
+# Make the plot
+plt.plot(x_values, vc_values, color='blueviolet')
+plt.xscale('log')
+plt.yscale('linear')
+plt.xlabel(r'$x = r / r_\mathrm{s}$', fontsize=12)
+plt.ylabel(r'$v_\mathrm{c} \; \;  (km/s)$', fontsize=12)
+
+plt.title('Normalized Circular Velocity Profile', **gfont)
+plt.show()
+```
+
 
 ## Cumulative Mass and Energy Integrals
 
