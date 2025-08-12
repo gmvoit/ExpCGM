@@ -70,7 +70,7 @@ This cell defines three functions determining how those profiles depend on $x = 
 ```python
 # Dimensionless pressure profile f_P is a power law equal to unity at r = r_s:
 
-alpha = 1.5       # power-law slope for the pressure profile
+alpha = 1.5       # default power-law slope for the pressure profile
 
 def f_P(x,alpha):        
     return x**(-alpha)
@@ -150,7 +150,7 @@ def F(x,alpha):
 
 ### Plotting the Dependence of $r_{\rm CGM}$ on $\varepsilon_{\rm CGM}$
 
-We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
+We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$ for $\alpha = 1.5$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
 The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example. It is inversely proportional to $I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
@@ -188,7 +188,7 @@ lines_1, labels_1 = ax1.get_legend_handles_labels()
 lines_2, labels_2 = ax2.get_legend_handles_labels()
 ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
 
-# Add a title, show the plot, and save a copy
+# Add a title and show the plot
 plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
 
