@@ -77,7 +77,7 @@ def f_P(x,alpha):
 
 # Dimensionless NFW potential well is normalized so that max(vc) is unity
 
-A_NFW = 4.625     # Normalization constant 
+A_NFW = 4.625     # NFW profile normalization constant 
 
 def phi(x):
     return A_NFW * ( 1 - np.log(1 + x) / x ) 
