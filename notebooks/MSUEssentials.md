@@ -44,7 +44,7 @@ All **ExpCGM** atmosphere models begin with a ***shape function***, defined on t
 $$
 \alpha(r) = -\frac{d\ln P}{d\ln r}
 $$
-Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable Notebook](MSUGeneralizable) demonstrates how to implement shape functions that depend on radius.
+Here we will use the simplest shape function: a constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable Notebook](MSUGeneralizable) demonstrates how to implement shape functions that depend on radius.
 
 This basic **ExpCGM** model also assumes an NFW gravitational potential:
 $$
