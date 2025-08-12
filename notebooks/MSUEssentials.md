@@ -193,6 +193,8 @@ plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
 
 ```
+
+![png](MSUEssentials_files/expCGM_xCGM_default.png)
     
 ![png](MSUEssentials_files/expCGM_xCGM_1.5.png)
     
