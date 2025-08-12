@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-The Python notebook cells on this page demonstrate how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into a Python notebook running on your own computer, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
+These Python notebook cells demonstrate how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into your own Python notebook, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
 
 Before executing the cells that follow, import these items:  
 
@@ -43,16 +43,16 @@ from ipywidgets import interact, FloatSlider
 
 To implement a pressure profile that is not a simple power law, an **ExpCGM** user needs to specify the pressure profile's shape by supplying a shape function $\alpha(x)$ that depends on a dimensionless radius $x$. 
 
-We will demonstrate how to do that by implementing a generalized NFW profile, as discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page. It has the shape function
+We will demonstrate how to do that by implementing the generalized NFW profile discussed on the [Pressure Profiles](/ExpCGM/extensions/PressureProfiles) page. Its shape function is
 $$
 \alpha(x) = - \alpha_\mathrm{in} 
             - (\alpha_\mathrm{out} - \alpha_\mathrm{in} )
               \left[ \frac{(x/x_\alpha)^{\alpha_\mathrm{tr}}}
                        {1+(x/x_\alpha)^{\alpha_\mathrm{tr}}} \right]
 $$
-Its power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $x_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
+The pressure profile's power-law slope therefore approaches $\alpha_\mathrm{in}$ at small radii and steepens to $\alpha_\mathrm{out}$ at large radii. The transition in slope happens near the radius $x_\alpha$, and the $\alpha_\mathrm{tr}$ parameter governs the sharpness of the transition.
 
-The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\alpha = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by replacing this form of $\alpha (x)$ with a different one:
+The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\alpha = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by defining $\alpha (x)$ to be a different function:
 
 ```python
 def alpha(x):
@@ -64,11 +64,11 @@ def alpha(x):
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 ```
 
-A numerical integration is now needed to determine the dimensionless pressure profile function because $\alpha(x)$ is not constant: 
+A numerical integration is now needed to determine the dimensionless pressure profile function because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
 $$
-Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain a version of $f_P(x)$ that is normalized to unity at $r = r_\mathrm{s}$:
+Note that the dimensionless pressure profile $f_P(x)$ is normalized to unity at $r = r_\mathrm{s}$.
 
 ```python
 def integrandf_P(t):
@@ -116,11 +116,12 @@ The default choice for a halo potential well in **ExpCGM** is an NFW potential w
 ```python
 A_NFW = 4.625      # Normalization constant for the NFW potential well
 
+def phi_NFW(x):
+    return 1- np.log(1+x)/x
+
 def vc2_NFW(x):
     return np.log(1+x) / x - 1 / (1+x)
 
-def phi_NFW(x):
-    return 1- np.log(1+x)/x
 ```
 
 Later, we will multiply each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
