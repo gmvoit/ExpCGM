@@ -52,13 +52,6 @@ $$
 $$
 Here, $x = r/r_{\rm s}$ represents radius in units of the NFW profile's scale radius $r_{\rm s}$, and $A_{\rm NFW} = 4.625$ is a normalization constant that makes the profile's maximum circular velocity (at $x = 2.163$) equal to $v_\varphi$. Note that we have chosen the potential's zero point to be at $r = 0$.
 
-We will now set the values of some model parameters:
-
-```python
-alpha = 1.5       # constant power-law slope for the pressure profile
-A_NFW = 4.625     # Normalization constant for the NFW potential well
-```
-
 ### Pressure Profile and Circular Velocity Profile
 
 In general, a dimensionless pressure-profile function $f_P$ is obtained by integrating the shape function $\alpha (x)$ over $\ln x$. However, no integration is necessary for constant $\alpha$. We can simply define the pressure-profile function to be 
@@ -75,18 +68,22 @@ $$
 This cell defines three functions determining how those profiles depend on $x = r / r_{\rm s}$:
 
 ```python
-# We choose to set f_P equal to unity at r = r_s:
+# Dimensionless pressure profile f_P is a power law equal to unity at r = r_s:
+
+alpha = 1.5       # power-law slope for the pressure profile
 
 def f_P(x,alpha):        
     return x**(-alpha)
 
-# We keep the NFW profile functions dimensionless and multiply them by A_NFW and v_phi^2 as needed:
+# Dimensionless NFW potential well is normalized so that max(vc) is unity
+
+A_NFW = 4.625     # Normalization constant 
 
 def phi(x):
-    return 1 - np.log(1 + x) / x 
+    return A_NFW * ( 1 - np.log(1 + x) / x ) 
 
 def vc2(x):
-    return np.log(1 + x) / x - 1 / (1 + x)
+    return A_NFW * ( np.log(1 + x) / x - 1 / (1 + x) )
 ```
 
 ### Cumulative Mass and Energy Integrals
@@ -129,7 +126,7 @@ def integrandI(t,alpha):
     return f_P(t,alpha) * t**2 / vc2(t)
 def I(x,alpha):        
     resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha,), limit=50)
-    return alpha / A_NFW * resultI
+    return alpha * resultI
 
 # Cumulative gravitational energy profile
 def integrandJphi(t,alpha):
@@ -155,7 +152,7 @@ def F(x,alpha):
 
 We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
-The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example. It is directly proportional to $\propto 1/I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
+The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example. It is inversely proportional to $I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
 ```python
 # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
@@ -194,11 +191,10 @@ ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
 # Add a title, show the plot, and save a copy
 plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
-plt.savefig('epsCGM_xCGM.pdf')
 
 ```
     
-![png](Notebook_1_files/eCGM_xCGM_1.5.png)
+![png](MSUEssentials_files/expCGM_xCGM_1.5.png)
     
 
 ### Adjustable Power-Law Slope
@@ -262,7 +258,7 @@ interact(update_alpha, alpha=alpha_slider);
 
 Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$ for $\alpha = 2$:
 
-![png](Notebook_1_files/eCGM_xCGM_2.0.png)
+![png](MSUEssentials_files/eCGM_xCGM_2.0.png)
 
 Comparing the two figures on this page shows that increasing $\alpha$ while keeping the atmosphere's specific energy constant causes its radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
