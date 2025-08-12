@@ -254,7 +254,7 @@ Running the next cell then makes an interactive plot with an adjustable value of
 #   continuous_update=True allows the graph to update while slider is moved
 #   continuous_update=False updates the graph after the slider stops moving
 
-alpha_slider = FloatSlider(description='$\alpha$', min=1.25, max=2.5, step=0.01, value=1.5,
+alpha_slider = FloatSlider(description=r'$\alpha$', min=1.25, max=2.5, step=0.01, value=1.5,
                            continuous_update=True)
 interact(update_alpha, alpha=alpha_slider);
 
@@ -266,4 +266,4 @@ Adjusting the slider shows that increasing $\alpha$ increases the radius of a ga
 
 Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
-To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement more complicated shape functions. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and how to account for non-thermal atmospheric support energy.
+To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement more shape functions that change with radius. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and explains how to account for non-thermal atmospheric support energy.
