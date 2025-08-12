@@ -40,7 +40,7 @@ from ipywidgets import interact, FloatSlider
 ```
 
 ## Power‑Law Atmosphere in an NFW Potential
-As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **ExpCGM** atmosphere models begin with a ***shape function*** that describes the shape of a galactic atmosphere's radial pressure profile:
+All **ExpCGM** atmosphere models begin with a ***shape function***, defined on the [Essentials](/ExpCGM/descriptions/Essentials) page, that specifies the shape of a galactic atmosphere's radial pressure profile:
 $$
 \alpha(r) = -\frac{d\ln P}{d\ln r}
 $$
