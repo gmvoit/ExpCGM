@@ -319,7 +319,10 @@ def F(x):
 
 # Generalized NFW pressure profile function depending on external parameters
 
-def alpha_gNFW(x):
+def alpha_gNFW(x,alpha_in):
+    alpha_out = 3.4
+    alpha_tr = 1.0
+    x_alpha = 2.16
     y = ( x / x_alpha )**alpha_tr
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 
@@ -327,17 +330,17 @@ def alpha_gNFW(x):
 eps = 10**(-4)     
 
 # Integral for cumulative mass profile
-def integrandI(t,x_H,f_H):
-    return alpha_gNFW(t) * f_P(t) * t**2 / vc2(t,x_H,f_H)
-def I(x,x_H,f_H):        
-    resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
+def integrandI(t,alpha_in):
+    return alpha_gNFW(t,alpha_in) * f_P(t) * t**2 / vc2(t,x_H,f_H)
+def I(x,alpha_in):        
+    resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha_in,), limit=50)
     return resultI
 
 # Integral for cumulative gravitational energy profile
-def integrandJphi(t,x_H,f_H):
-    return alpha_gNFW(t) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
-def Jphi(t):
-    resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
+def integrandJphi(t,alpha_in):
+    return alpha_gNFW(t,alpha_in) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
+def Jphi(x,alpha_in):
+    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha_in,), limit=50)
     return resultJphi
 
 # Integrate to obtain cumulative thermal energy profile
@@ -347,17 +350,17 @@ def Jth(x):
     resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
     return 3 / 2 * resultJth
 
-def F(x):
-    return (Jphi(x) + Jth(x)) / I(x)
+def F(x,alpha_in):
+    return (Jphi(x,alpha_in) + Jth(x)) / I(x,alpha_in)
 
 # Function update_gNFW for updating the plot
 
-def update_gNFW(alpha_in=1.0,alpha_out=3.4,alpha_tr=1.0,x_alpha=2.16):
+def update_gNFW(alpha_in=1.0):
 
     # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
     x_values = np.logspace(-1.5, 2, 50)
-    y1_values = [F(x) for x in x_values]
-    y2_values = [1/I(x,x_H,f_H) for x in x_values]
+    y1_values = [F(x,alpha_in) for x in x_values]
+    y2_values = [1/I(x,alpha_in) for x in x_values]
 
     # Choose a font
     gfont = {'fontname':'georgia'}
@@ -395,15 +398,9 @@ def update_gNFW(alpha_in=1.0,alpha_out=3.4,alpha_tr=1.0,x_alpha=2.16):
 #   continuous_update=True allows the graph to update while slider is moved
 #   continuous_update=False updates the graph after the slider stops moving
 
-alpha_lo_slider = FloatSlider(description=r'$\alpha$', min=0.0, max=1.5, step=0.01, value=1.5,
-                           continuous_update=True)
-alpha_hi_slider = FloatSlider(description=r'$\alpha$', min=1.5, max=5.0, step=0.01, value=1.5,
-                           continuous_update=True)
-alpha_tr_slider = FloatSlider(description=r'$\alpha$', min=0.5, max=2.5, step=0.01, value=1.5,
-                           continuous_update=True)
-x_alpha_slider = FloatSlider(description=r'$\alpha$', min=0.5, max=5.0, step=0.01, value=1.5,
-                           continuous_update=True)
-interact(update_gNFW, alpha_lo=alpha_lo_slider, alpha_hi=alpha_hi_slider);
+alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=1.5, step=0.01, value=1.0,
+                           continuous_update=False)
+interact(update_gNFW, alpha_in=alpha_in_slider);
 
 ```
 
