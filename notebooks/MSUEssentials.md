@@ -194,9 +194,9 @@ plt.show()
 
 ```
 
-![png](MSUEssentials_files/expCGM_xCGM_default.png)
+![png](MSUEssentials_files/epsCGM_xCGM_default.png)
     
-![png](MSUEssentials_files/expCGM_xCGM_1.5.png)
+![png](MSUEssentials_files/epsCGM_xCGM_1.5.png)
     
 
 ### Adjustable Power-Law Slope
