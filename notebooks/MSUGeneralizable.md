@@ -55,6 +55,8 @@ The pressure profile's power-law slope therefore approaches $\alpha_\mathrm{in}$
 The following cell defines a generalized NFW shape function with the parameter set $\alpha_\mathrm{in} = 1.0$, $\alpha_\mathrm{out} = 3.4$, $\alpha_\mathrm{tr} = 1.0$, and  $x_\alpha = 2.16$. Users can customize the pressure profile either by adjusting these parameters or by defining $\alpha (x)$ to be a different function:
 
 ```python
+# Generalized NFW pressure profile function with default parameters
+
 def alpha(x):
     alpha_in = 1.0
     alpha_out = 3.4
@@ -71,6 +73,8 @@ $$
 Note that the dimensionless pressure profile is normalized to unity at $r = r_\mathrm{s}$.
 
 ```python
+# Numerically integrates shape function to obtain dimensionless pressure profile
+
 def integrandf_P(t):
     return alpha(t) / t
 
@@ -83,6 +87,8 @@ def f_P(x):
 To check the result, executing this cell makes a plot showing $f_P(x)$:
 
 ```python
+# Makes a plot of the dimensionless pressure profile
+
 # Specify the domain of x and determine f_P(x)
 x_values = np.logspace(-1.5, 2, 50)
 y_values = [f_P(x) for x in x_values]
@@ -114,6 +120,8 @@ The function $I(x)$ is an integral proportional to the cumulative enclosed gas-m
 The default choice for a halo potential well in **ExpCGM** is an NFW potential well, described by the dimensionless functions defined in the following cell. They are normalized so that the maximum circular velocity is unity:
 
 ```python
+# NFW halo potential well functions
+
 A_NFW = 4.625      # Normalization constant for the NFW potential well
 
 def phi_NFW(x):
@@ -124,7 +132,7 @@ def vc2_NFW(x):
 
 ```
 
-Later, we will multiply each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
+Multiplying each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, makes them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
 
 To illustrate how to customize the potential well, we will extend the NFW halo model by adding a central galaxy potential with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
 $$
@@ -178,23 +186,21 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/vc_dimensionless.png)
 
-## Temperature Profile and Halo Mass
+## Normalization of Circular Velocity
 
-In the **ExpCGM** framework, the temperature profile of an atmosphere fully supported by thermal pressure depends only on $\alpha(x)$ and $v_c(x)$: 
-$$ 
-kT(x) = \frac { \mu m_p v_\mathrm{c}^2 (x) } { \alpha(x) }
-$$
-However, the normalization factor $v_\varphi$ of the circular velocity profile depends on the total mass $M_\mathrm{halo}$ within a bounding radius $r_\mathrm{halo}$.
-
-The usual procedure for calculating the normalization factor is to define the halo's radius so that the mean matter density within $r_\mathrm{halo}$ is $\Delta_\mathrm{halo}$ times the universe's critical density at the halo's redshift $z$. Then the circular velocity at $r_\mathrm{halo}$ is 
+A circular velocity profile's normalization factor $v_\varphi$ depends on the total halo mass $M_\mathrm{halo}$ within a bounding radius $r_\mathrm{halo}$. The usual procedure for calculating it defines the halo's radius so that the mean matter density within $r_\mathrm{halo}$ is $\Delta_\mathrm{halo}$ times the universe's critical density at the halo's redshift $z$. Then the circular velocity at $r_\mathrm{halo}$ is 
 $$
 v_\mathrm{c}(r_\mathrm{halo}) 
   = \left( \frac {\Delta_\mathrm{halo}} {2} \right)^{1/6}
     \left[ G M_\mathrm{halo} H(z) \right]^{1/3}
 $$
-The following cell defines a function that returns $v_\mathrm{halo}$ in units of kilometers per second when given $z$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass:
+The following cell defines two functions:
+ * *vhalo_kms* returns $v_\mathrm{halo}$ in units of kilometers per second when given $z$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass
+ * *v_phi_NFW* returns an NFW halo's normalization factor $v_\varphi$ when given $v_\mathrm{halo}$ and the halo concentration parameter $c_\mathrm{halo} = r_\mathrm{\halo} / r_\mathrm{s}
 
 ```python
+# Returns the circular velocity (in km/s) at the radius r_halo containing the mass M_halo (in MSun)
+
 def vhalo_kms(M_halo,z,Delta):
 
   # Specify some constants
@@ -214,17 +220,15 @@ def vhalo_kms(M_halo,z,Delta):
 
   # Return vc(rhalo) in km/s
   return vc_rhalo_cgs / 1e5
+
   
-```
+# Returns the normalization factor v_phi for an NFW halo with concentration c_halo and a circular velocity v_halo at the radius r_halo
 
-To obtain the $v_\mathrm{c}$ normalization factor for an NFW halo model, the halo's the concentration factor $c_\mathrm{halo} = r_\mathrm{halo} / r_\mathrm{s}$ must be specified. The next cell defines a function that computes $v_\varphi$ when given $v_\mathrm{halo}$ and $c_\mathrm{halo}$:
-
-```python
 def v_phi_NFW(v_halo,c_halo):
   return v_halo / np.sqrt( vc2_NFW(c_halo) )
 ```
 
-Once that function is defined, executing this cell makes a plot showing the normalized circular velocity profile:
+Once those functions are defined, executing the next cell makes a plot showing a properly normalized circular velocity profile:
 
 ```python
 # Set the parameters of the NFW halo model 
@@ -242,10 +246,6 @@ cm_per_kpc = 3.08e21
 g_per_MSun = 2e33
 rhalo_cm = G * M_halo * g_per_MSun / (vhalo_kms(M_halo,z_halo,Delta_halo) * 1e5)**2
 rhalo_kpc = rhalo_cm / cm_per_kpc
-
-# Set the parameters of the Hernquist model 
-x_H = 0.1
-f_H = 1.0
 
 # Specify the domain of x and determine r in kpc and v_c in km/s
 x_values = np.logspace(-1.5, 2, 50)
@@ -271,10 +271,6 @@ plt.show()
 
 ![png](MSUGeneralizable_files/vc_vs_r.png)
 
-Multiplying $v_\mathrm{c}^2(r)$ by $\mu m_p$ and dividing by $\alpha(r)$ then gives the model's hydrostatic temperature profile:
-
-![png](MSUGeneralizable_files/Tprofile.png)
-
 
 
 ## Cumulative Mass and Energy Integrals
@@ -292,7 +288,7 @@ def integrandI(t):
     return alpha(t) * f_P(t) * t**2 / vc2(t)
 def I(x):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
-    return 1 / A_NFW * resultI
+    return resultI
 
 # Integrate to obtain cumulative gravitational energy profile
 def integrandJphi(t):
