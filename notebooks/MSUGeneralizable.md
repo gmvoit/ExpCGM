@@ -73,7 +73,7 @@ $$
 Note that the dimensionless pressure profile is normalized to unity at $r = r_\mathrm{s}$.
 
 ```python
-# Numerically integrates shape function to obtain dimensionless pressure profile
+# Numerical integration of shape function to obtain a dimensionless pressure profile
 
 def integrandf_P(t):
     return alpha(t) / t
@@ -265,7 +265,6 @@ plt.xlabel(r'$r \; \; (kpc)$', fontsize=12)
 plt.ylabel(r'$v_\mathrm{c} \; \;  (km/s)$', fontsize=12)
 
 plt.title('Normalized Circular Velocity Profile', **gfont)
-plt.savefig('vc_vs_r.pdf')
 plt.show()
 ```
 
