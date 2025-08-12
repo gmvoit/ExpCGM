@@ -79,7 +79,7 @@ def integrandf_P(t):
     return alpha(t) / t
 
 def f_P(x):        
-    resultf_P, _ = integrate.quad(integrandf_P, 1+eps, x, limit=50)
+    resultf_P, _ = integrate.quad(integrandf_P, 1, x, limit=50)
     return np.exp(-resultf_P)
 
 ```
@@ -186,7 +186,7 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/vc_dimensionless.png)
 
-## Normalization of Circular Velocity
+## Normalization of Circular Velocity Profile
 
 A circular velocity profile's normalization factor $v_\varphi$ depends on the total halo mass $M_\mathrm{halo}$ within a bounding radius $r_\mathrm{halo}$. The usual procedure for calculating it defines the halo's radius so that the mean matter density within $r_\mathrm{halo}$ is $\Delta_\mathrm{halo}$ times the universe's critical density at the halo's redshift $z$. Then the circular velocity at $r_\mathrm{halo}$ is 
 $$
@@ -194,9 +194,9 @@ v_\mathrm{c}(r_\mathrm{halo})
   = \left( \frac {\Delta_\mathrm{halo}} {2} \right)^{1/6}
     \left[ G M_\mathrm{halo} H(z) \right]^{1/3}
 $$
-The following cell defines two functions:
- * *vhalo_kms* returns $v_\mathrm{halo}$ in units of kilometers per second when given $z$, $\Delta_\mathrm{halo}$, and $M_\mathrm{halo}$ in units of solar mass
- * *v_phi_NFW* returns an NFW halo's normalization factor $v_\varphi$ when given $v_\mathrm{halo}$ and the halo concentration parameter $c_\mathrm{halo} = r_\mathrm{\halo} / r_\mathrm{s}
+The following cell therefore defines two functions:
+ * *vhalo_kms* returns $v_\mathrm{halo}$ in units of kilometers per second when given $M_\mathrm{halo}$ in units of solar mass along with $z$ and $\Delta_\mathrm{halo}$
+ * *v_phi_NFW* returns an NFW halo's normalization factor $v_\varphi$ when given $v_\mathrm{halo}$ and the halo concentration parameter $c_\mathrm{halo} = r_\mathrm{\halo} / r_\mathrm{s}$
 
 ```python
 # Returns the circular velocity (in km/s) at the radius r_halo containing the mass M_halo (in MSun)
@@ -216,13 +216,13 @@ def vhalo_kms(M_halo,z,Delta):
   M_halo_grams = M_halo * MSun
 
   # Determine v_c  at r_halo
-  vc_rhalo_cgs = ( Delta / 2 )**(1/6) * ( G * Mhalo_grams * Hz )**(1/3)
+  vc_rhalo_cgs = ( Delta / 2 )**(1/6) * ( G * M_halo_grams * Hz )**(1/3)
 
   # Return vc(rhalo) in km/s
   return vc_rhalo_cgs / 1e5
 
   
-# Returns the normalization factor v_phi for an NFW halo with concentration c_halo and a circular velocity v_halo at the radius r_halo
+# Returns the normalization factor v_phi for an NFW halo in the same units as v_halo
 
 def v_phi_NFW(v_halo,c_halo):
   return v_halo / np.sqrt( vc2_NFW(c_halo) )
@@ -261,7 +261,7 @@ plt.rcParams['font.size'] = 12
 plt.plot(r_values, vc_values, color='blueviolet')
 plt.xscale('log')
 plt.yscale('linear')
-plt.xlabel(r'$r \; \; (kpc)$', fontsize=12)
+plt.xlabel(r'$r$  (kpc)', fontsize=12)
 plt.ylabel(r'$v_\mathrm{c} \; \;  (km/s)$', fontsize=12)
 
 plt.title('Normalized Circular Velocity Profile', **gfont)
@@ -270,22 +270,27 @@ plt.show()
 
 ![png](MSUGeneralizable_files/vc_vs_r.png)
 
+## Non-thermal Support Energy
 
+$$
+f_\mathrm{th} (x) \neq 1
+$$
 
 ## Cumulative Mass and Energy Integrals
 
-We also redefine the energy integrals so they have $\alpha(x)$ inside them. We can also define the $v_c^2(x)$ and $\varphi(x)$ functions the same way again so each section of the notebook is self-contained.
+When the pressure profile's shape function depends on radius, the **ExpCGM** integrals for cumulative mass and energy need to have $\alpha(x)$ inside them, unlike in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials). This cell defines functions compute those integrals based on a user-defined shape function: 
 
 
 ```python
+# Functions performing mass and energy integrals for a radius-dependent shape function
 
 # Set a lower limit on x=r/r_s for numerical integrations
 eps = 10**(-4)     
 
 # Integrate to obtain cumulative mass profile
-def integrandI(t):
-    return alpha(t) * f_P(t) * t**2 / vc2(t)
-def I(x):        
+def integrandI(t,x_H,f_H):
+    return alpha(t) * f_P(t) * t**2 / vc2(t,x_H,f_H)
+def I(x,x_H,f_H):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return resultI
 
