@@ -44,7 +44,7 @@ As described on the [Essentials](/ExpCGM/descriptions/Essentials) page, all **Ex
 $$
 \alpha(r) = -\frac{d\ln P}{d\ln r}
 $$
-Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable Notebook](MSUGeneralizable) demonstrates how to implement more complicated shape functions.
+Here we will use the simplest shape function: A constant value of $\alpha$ resulting in a power-law pressure profile. The [MSU Generalizable Notebook](MSUGeneralizable) demonstrates how to implement shape functions that depend on radius.
 
 This basic **ExpCGM** model also assumes an NFW gravitational potential:
 $$
@@ -57,7 +57,6 @@ We will now set the values of some model parameters:
 ```python
 alpha = 1.5       # constant power-law slope for the pressure profile
 A_NFW = 4.625     # Normalization constant for the NFW potential well
-eps = 10**(-4)    # Lower limit on x=r/r_s for numerical integrations
 ```
 
 ### Pressure Profile and Circular Velocity Profile
@@ -122,24 +121,31 @@ This cell defines functions that compute the necessary dimensionless mass and en
 ```python
 # For each integral we first define a function providing the integrand, then do the integration
 
+# Set lower limit on x=r/r_s for numerical integrations
+eps = 10**(-4)    
+
+# Cumulative gas mass profile
 def integrandI(t,alpha): 
     return f_P(t,alpha) * t**2 / vc2(t)
 def I(x,alpha):        
     resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha,), limit=50)
     return alpha / A_NFW * resultI
 
+# Cumulative gravitational energy profile
 def integrandJphi(t,alpha):
     return f_P(t,alpha) * phi(t) / vc2(t) * t**2
 def Jphi(x,alpha):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha,), limit=50)
     return alpha * resultJphi
 
+# Cumulative thermal energy profile
 def integrandJth(t,alpha):
     return f_P(t,alpha) * t**2
 def Jth(x,alpha):
     resultJth, _ = integrate.quad(integrandJth, eps, x, args=(alpha,), limit=50)
     return 3 / 2 * resultJth
 
+# Mean specific energy profile
 def F(x,alpha):
     return (Jphi(x,alpha) + Jth(x,alpha)) / I(x,alpha)
 
@@ -185,9 +191,10 @@ lines_1, labels_1 = ax1.get_legend_handles_labels()
 lines_2, labels_2 = ax2.get_legend_handles_labels()
 ax1.legend(lines_1 + lines_2, labels_1 + labels_2, loc='center left')
 
-# Add a title and show the plot
+# Add a title, show the plot, and save a copy
 plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
+plt.savefig('epsCGM_xCGM.pdf')
 
 ```
     
@@ -247,7 +254,8 @@ Running the next cell then makes an interactive plot with an adjustable value of
 #   continuous_update=True allows the graph to update while slider is moved
 #   continuous_update=False updates the graph after the slider stops moving
 
-alpha_slider = FloatSlider(min=1.25, max=2.5, step=0.01, value=1.5, continuous_update=True)
+alpha_slider = FloatSlider(description='$\alpha$', min=1.25, max=2.5, step=0.01, value=1.5,
+                           continuous_update=True)
 interact(update_alpha, alpha=alpha_slider);
 
 ```
