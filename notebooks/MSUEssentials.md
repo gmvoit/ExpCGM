@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-The Python notebook cells on this page present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on simple assumptions about the atmosphere's pressure profile and the gravitational potential well confining it. To copy and paste a cell into a notebook running on your own computer, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
+The Python notebook cells on this page present an implementation of the **ExpCGM** framework that relates a galactic atmosphere's radius to its mean specific energy, based on simple assumptions about the atmosphere's pressure profile and gravitational potential well. To copy and paste a cell into your own notebook, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
 
 Before executing the rest of the cells, you will want to import a few items:
 
@@ -155,7 +155,7 @@ def F(x,alpha):
 
 We now have the tools needed to reproduce the plot on the [Essentials](/ExpCGM/descriptions/Essentials) page, showing how $x_{\rm CGM} = r_\mathrm{CGM} / r_{\rm s}$ depends on $\varepsilon_{\rm CGM}/v_\varphi^2$. The procedure first computes the dependence of $F(x_{\rm CGM})$ on $x_{\rm CGM}$. Then it inverts that dependence to obtain the desired plot. 
 
-The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example, and it is directly proportional to $\propto 1/I(x_{\rm CGM})$, with a normalization factor given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
+The plot also shows how the pressure-profile normalization factor $P_0$ declines as $\varepsilon_{\rm CGM}$ rises and the atmosphere expands. Note that $P_0$ is the pressure at $r = r_{\rm s}$ in this example. It is directly proportional to $\propto 1/I(x_{\rm CGM})$, and the normalization factor is given on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
 ```python
 # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
@@ -264,6 +264,6 @@ Adjusting the slider shows that increasing $\alpha$ increases the radius of a ga
 
 ![png](Notebook_1_files/eCGM_xCGM_2.0.png)
 
-Comparing the two figures on this page shows that increasing $\alpha$ while holding $\varepsilon_{\rm CGM} / v_\varphi^2$ constant causes the atmosphere's radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
+Comparing the two figures on this page shows that increasing $\alpha$ while keeping the atmosphere's specific energy constant causes its radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
 To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement more shape functions that change with radius. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and explains how to account for non-thermal atmospheric support energy.
