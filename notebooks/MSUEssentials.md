@@ -193,8 +193,6 @@ plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
 plt.show()
 
 ```
-
-![png](MSUEssentials_files/epsCGM_xCGM_default.png)
     
 ![png](MSUEssentials_files/epsCGM_xCGM_1.5.png)
     
@@ -260,7 +258,7 @@ interact(update_alpha, alpha=alpha_slider);
 
 Adjusting the slider shows that increasing $\alpha$ increases the radius of a galactic atmosphere with a given specific energy. The following figure illustrates the relationship between $x_{\rm CGM}$ and $\varepsilon_{\rm CGM} / v_\varphi^2$ for $\alpha = 2$:
 
-![png](MSUEssentials_files/eCGM_xCGM_2.0.png)
+![png](MSUEssentials_files/epsCGM_xCGM_2.0.png)
 
 Comparing the two figures on this page shows that increasing $\alpha$ while keeping the atmosphere's specific energy constant causes its radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
