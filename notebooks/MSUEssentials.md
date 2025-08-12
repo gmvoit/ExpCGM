@@ -118,7 +118,7 @@ This cell defines functions that compute the necessary dimensionless mass and en
 ```python
 # For each integral we first define a function providing the integrand, then do the integration
 
-# Set lower limit on x=r/r_s for numerical integrations
+# Set a lower limit on x=r/r_s for numerical integrations
 eps = 10**(-4)    
 
 # Cumulative gas mass profile
