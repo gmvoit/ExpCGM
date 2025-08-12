@@ -64,11 +64,11 @@ def alpha(x):
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 ```
 
-A numerical integration is now needed to determine the dimensionless pressure profile function because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
+A numerical integration is now needed to determine the dimensionless pressure profile function $f_P(x)$ because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
 $$
-f_P(r) = \exp \left[ -\int_1^{r/r_0} \frac{\alpha(x)}{x}dx \right]
+f_P(r) = \exp \left[ -\int_1^{r/r_\mathrm{s} \frac{\alpha(x)}{x}dx \right]
 $$
-Note that the dimensionless pressure profile $f_P(x)$ is normalized to unity at $r = r_\mathrm{s}$.
+Note that the dimensionless pressure profile is normalized to unity at $r = r_\mathrm{s}$.
 
 ```python
 def integrandf_P(t):
@@ -80,7 +80,7 @@ def f_P(x):
 
 ```
 
-To check the result, this cell makes a plot showing $f_P(x)$:
+To check the result, executing this cell makes a plot showing $f_P(x)$:
 
 ```python
 # Specify the domain of x and determine f_P(x)
@@ -103,7 +103,7 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/f_p.png)
 
-In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy ($\varepsilon_\mathrm{CGM}$). In this case, the normalization factor is
+In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy ($\varepsilon_\mathrm{CGM}$). The normalization factor in this case is
 $$
 P_0 = P(r_\mathrm{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} {I(x_\mathrm{CGM})} 
 $$
@@ -111,22 +111,22 @@ The function $I(x)$ is an integral proportional to the cumulative enclosed gas-m
 
 ## User-Defined Potential Wells
 
-The default choice for a halo potential well in **ExpCGM** is an NFW potential well, described by the dimensionless functions defined in the following cell:
+The default choice for a halo potential well in **ExpCGM** is an NFW potential well, described by the dimensionless functions defined in the following cell. They are normalized so that the maximum circular velocity is unity:
 
 ```python
 A_NFW = 4.625      # Normalization constant for the NFW potential well
 
 def phi_NFW(x):
-    return 1- np.log(1+x)/x
+    return A_NFW * ( 1 - np.log(1+x)/x )
 
 def vc2_NFW(x):
-    return np.log(1+x) / x - 1 / (1+x)
+    return A_NFW * ( np.log(1+x) / x - 1 / (1+x) )
 
 ```
 
 Later, we will multiply each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, to make them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
 
-To illustrate how to customize the potential well, we will extend the NFW halo model by adding a central galaxy with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
+To illustrate how to customize the potential well, we will extend the NFW halo model by adding a central galaxy potential with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
 $$
 \varphi_\mathrm{H} = 4 v_\mathrm{H}^2 \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
 $$
@@ -153,7 +153,7 @@ def vc(x,x_H,f_H):
 To check the result, this cell makes a plot showing $v_\mathrm{c}(x)/v_\varphi$ for $x_H = 0.1$ and $f_H = 1.0$:
 
 ```python
-# Set the parameters of the Hernquist model 
+# Set the default parameters of the Hernquist model 
 x_H = 0.1
 f_H = 1.0
 
