@@ -195,7 +195,10 @@ plt.show()
 ```
     
 ![png](MSUEssentials_files/epsCGM_xCGM_1.5.png)
-    
+
+To interpret the plot, consider a halo with a concentration $r_\mathrm{halo} / r_\mathrm{s} = 10$, meaning that $r_\mathrm{halo}$ corresponds to $x = 10$. The red line shows that $\varepsilon_\mathrm{CGM} \approx 3.5 v_\varphi^2$ at that radius. A galactic atmosphere with that specific energy would have a radius $r_\mathrm{CGM}$ equal to $r_\mathrm{halo}$, and increasing its specific energy would make $r_\mathrm{CGM}$ larger than $r_\mathrm{halo}$.
+
+Both the red line and the blue line show how strongly the atmosphere's radius responds to an increase in $\varepsilon\mathrm{CGM}$. Raising the mean specific energy of an atmosphere with $r_\mathrm{CGM} \approx 10 r_\mathrm{s}$ by an increment similar to $v_\varphi^2$ causes its radius to expand by more than an order of magnitude and lowers its pressure by more than an order of magnitude. Note also that the effects of raising $\varepsilon_\mathrm{CGM}$ on atmospheres with $r_\mathrm{CGM} \approx 3 r_\mathrm{s}$ are not as pronounced.
 
 ### Adjustable Power-Law Slope
 
