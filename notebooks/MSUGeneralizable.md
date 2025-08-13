@@ -84,7 +84,7 @@ def f_P(x):
 
 ```
 
-To check the result, executing this cell makes a plot showing $f_P(x)$:
+To check the result, executing the next cell makes a plot showing $f_P(x)$:
 
 ```python
 # Makes a plot of the dimensionless pressure profile
@@ -272,9 +272,21 @@ plt.show()
 
 ## Non-thermal Support Energy
 
-$$
-f_\mathrm{th} (x) \neq 1
-$$
+Non-thermal forms of atmospheric support energy can be accounted for with the $f_\mathrm{th}$ and $f_\varphi$ parameters defined on the [Essentials](/ExpCGM/descriptions/Essentials) page. Each parameter can be a user-defined function of radius that is included in the integrals deter
+
+Here we define functions that simply set those parameters equal to unity:
+
+```python
+# Assume all of the atmospheric support energy is thermal
+def fth(x):
+  fth_unity = 1
+  return fth_unity
+
+# Assume actual gravitational acceleration is not modified
+def fphi(x):
+  fphi_unity = 1
+  return fphi_unity
+```
 
 ## Cumulative Mass and Energy Integrals
 
@@ -289,14 +301,14 @@ eps = 10**(-4)
 
 # Integrate to obtain cumulative mass profile
 def integrandI(t,x_H,f_H):
-    return alpha(t) * f_P(t) * t**2 / vc2(t,x_H,f_H)
+    return alpha(t) * f_P(t) * t**2 / ( fth(x) * fphi(x) * vc2(t,x_H,f_H) )
 def I(x,x_H,f_H):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return resultI
 
 # Integrate to obtain cumulative gravitational energy profile
 def integrandJphi(t,x_H,f_H):
-    return alpha(t) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
+    return alpha(t) * f_P(t) * phi(t,x_H,f_H) / ( fth(x) * fphi(x) * vc2(t,x_H,f_H) ) * t**2
 def Jphi(t):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return resultJphi
