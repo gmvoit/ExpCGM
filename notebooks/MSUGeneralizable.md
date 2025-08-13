@@ -301,14 +301,14 @@ eps = 10**(-4)
 
 # Integrate to obtain cumulative mass profile
 def integrandI(t,x_H,f_H):
-    return alpha(t) * f_P(t) * t**2 / ( fth(x) * fphi(x) * vc2(t,x_H,f_H) )
+    return alpha(t) * f_P(t) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) )
 def I(x,x_H,f_H):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return resultI
 
 # Integrate to obtain cumulative gravitational energy profile
 def integrandJphi(t,x_H,f_H):
-    return alpha(t) * f_P(t) * phi(t,x_H,f_H) / ( fth(x) * fphi(x) * vc2(t,x_H,f_H) ) * t**2
+    return alpha(t) * f_P(t) * phi(t,x_H,f_H) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) ) 
 def Jphi(t):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return resultJphi
