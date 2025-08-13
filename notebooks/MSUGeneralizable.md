@@ -66,9 +66,9 @@ def alpha(x):
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 ```
 
-A numerical integration is now needed to determine the dimensionless pressure profile function $f_P(x)$ because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
+A numerical integration is needed to determine the dimensionless pressure profile function $f_P(x)$ because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
 $$
-f_P(r) = \exp \left[ -\int_1^{r/r_\mathrm{s} \frac{\alpha(x)}{x}dx \right]
+f_P(r) = \exp \left[ -\int_1^{r/r_\mathrm{s}} \frac {\alpha(x)} {x} dx \right]
 $$
 Note that the dimensionless pressure profile is normalized to unity at $r = r_\mathrm{s}$.
 
@@ -109,15 +109,15 @@ plt.show()
 ```
 ![png](MSUGeneralizable_files/f_p.png)
 
-In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy ($\varepsilon_\mathrm{CGM}$). The normalization factor in this case is
+In the **ExpCGM** framework, a pressure profile's normalization depends on the atmosphere's mean specific energy ($\varepsilon_\mathrm{CGM}$). The normalization factor for this pressure profile is
 $$
 P_0 = P(r_\mathrm{s}) = \frac {M_\mathrm{CGM} v_\varphi^2} {4 \pi r_\mathrm{s}^3} \frac {1} {I(x_\mathrm{CGM})} 
 $$
-The function $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, as explained on the [Essentials](/ExpCGM/descriptions/Essentials) page, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$.
+The function $I(x)$ is an integral proportional to the cumulative enclosed gas-mass profile, and $x_\mathrm{CGM}$ is a dimensionless radius that solves $\varepsilon_\mathrm{CGM} = v_\varphi^2  F(x_{\rm CGM})$, as explained on the [Essentials](/ExpCGM/descriptions/Essentials) page.
 
 ## User-Defined Potential Wells
 
-The default choice for a halo potential well in **ExpCGM** is an NFW potential well, described by the dimensionless functions defined in the following cell. They are normalized so that the maximum circular velocity is unity:
+The default choice for a halo potential well in **ExpCGM** is an NFW potential well, expressed in terms of the dimensionless functions defined in the following cell. They are normalized so that the maximum circular velocity is unity:
 
 ```python
 # NFW halo potential well functions
@@ -132,9 +132,9 @@ def vc2_NFW(x):
 
 ```
 
-Multiplying each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, makes them dimensional quantities. You may also choose to replace the NFW potential with a user-defined potential well.
+Multiplying each of these functions by $v_\varphi^2$, the square of the halo's maximum circular velocity, makes them dimensional quantities. You may also choose to replace the NFW potential functions defined here with a user-defined potential well.
 
-To illustrate how to customize the potential well, we will extend the NFW halo model by adding a central galaxy potential with a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy, we use a Hernquist potential with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
+To illustrate how to customize an **ExpCGM** atmosphere model's potential well, we will extend the NFW halo model by adding a central galaxy potential having a maximum circular velocity $v_\mathrm{H} = f_\mathrm{H} v_\varphi$, where $f_\mathrm{H}$ is an adjustable model parameter. To represent the central galaxy's potential well, we will use a Hernquist model with a scale radius $r_\mathrm{H} = x_\mathrm{H} r_\mathrm{s}$: 
 $$
 \varphi_\mathrm{H} = 4 v_\mathrm{H}^2 \left( 1 + \frac {r_\mathrm{H}} {r + r_\mathrm{H}} \right)
 $$
@@ -158,7 +158,7 @@ def vc(x,x_H,f_H):
     return np.sqrt(vc2(x,x_H,f_H))
 ```
 
-To check the result, this cell makes a plot showing $v_\mathrm{c}(x)/v_\varphi$ for $x_H = 0.1$ and $f_H = 1.0$:
+To check the result, the next cell makes a plot showing $v_\mathrm{c}(x)/v_\varphi$ for $x_H = 0.1$ and $f_H = 1.0$:
 
 ```python
 # Set the default parameters of the Hernquist model 
@@ -196,7 +196,7 @@ v_\mathrm{c}(r_\mathrm{halo})
 $$
 The following cell therefore defines two functions:
  * *vhalo_kms* returns $v_\mathrm{halo}$ in units of kilometers per second when given $M_\mathrm{halo}$ in units of solar mass along with $z$ and $\Delta_\mathrm{halo}$
- * *v_phi_NFW* returns an NFW halo's normalization factor $v_\varphi$ when given $v_\mathrm{halo}$ and the halo concentration parameter $c_\mathrm{halo} = r_\mathrm{\halo} / r_\mathrm{s}$
+ * *v_phi_NFW* returns an NFW halo's normalization factor $v_\varphi$ when given $v_\mathrm{halo}$ and the halo concentration parameter $c_\mathrm{halo} = r_\mathrm{halo} / r_\mathrm{s}$
 
 ```python
 # Returns the circular velocity (in km/s) at the radius r_halo containing the mass M_halo (in MSun)
