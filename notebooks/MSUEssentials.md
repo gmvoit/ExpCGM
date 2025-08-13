@@ -265,5 +265,5 @@ Adjusting the slider shows that increasing $\alpha$ increases the radius of a ga
 
 Comparing the two figures on this page shows that increasing $\alpha$ while keeping the atmosphere's specific energy constant causes its radius to increase. That happens because a hydrostatic atmosphere with a steeper power-law pressure profile (larger $\alpha$) has a lower equilibrium temperature. A greater proportion of its specific energy must be therefore gravitational, meaning that more of the atmosphere's mass must be at larger radii than in an atmosphere with the same value of $\varepsilon_\mathrm{CGM}$ and a shallower power-law pressure profile. 
     
-To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement more shape functions that change with radius. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and explains how to account for non-thermal atmospheric support energy.
+To go further, see the [MSU Generalizable Notebook](MSUGeneralizable). As mentioned above, it demonstrates how to implement shape functions that change with radius. It also demonstrates how to implement alternative potential wells, including ones with a central galaxy, and explains how to account for non-thermal atmospheric support energy.
 
