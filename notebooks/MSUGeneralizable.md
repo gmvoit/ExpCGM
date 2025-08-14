@@ -274,7 +274,7 @@ plt.show()
 
 Non-thermal forms of atmospheric support energy can be accounted for with the $f_\mathrm{th}$ and $f_\varphi$ parameters defined on the [Essentials](/ExpCGM/descriptions/Essentials) page. Each parameter can be a user-defined function of radius that is included in the integrals for the cumulative mass and energy integrals.
 
-Here we define functions that simply set those parameters equal to unity and include a function for $\alpha_\mathrm{eff} that becomes important when $f_\mathrm$ depends on radius:
+Here we define functions that simply set those parameters equal to unity and include a function for $\alpha_\mathrm{eff} that becomes important when $f_\mathrm{th}$ depends on radius:
 
 ```python
 # Assume all of the atmospheric support energy is thermal
