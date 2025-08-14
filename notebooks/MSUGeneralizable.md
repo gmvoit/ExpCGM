@@ -28,7 +28,7 @@ nav_exclude: true
 
 *Contributed by Doruk Yaldiz and Jazzmin Partridge, edited by Mark Voit*
 
-These Python notebook cells demonstrate how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into your own Python notebook, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
+The Python code on this page demonstrates how to extend the **ExpCGM** implementation in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials) to incorporate a user-defined pressure profile shape, a user-defined gravitational potential, and non-thermal atmospheric support energy. To copy and paste a cell into your own Python notebook, move your cursor to the upper right corner of the cell and click on the clipboard icon that appears.
 
 Before executing the cells that follow, import these items:  
 
@@ -66,7 +66,7 @@ def alpha(x):
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 ```
 
-A numerical integration is needed to determine the dimensionless pressure profile function $f_P(x)$ because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x)$ over $\ln x$ to obtain
+A numerical integration is needed to determine the dimensionless pressure profile function $f_P(x)$ because $\alpha(x)$ is not constant. Executing the next cell defines a function that integrates $\alpha (x) / x$ over $dx$ to obtain
 $$
 f_P(r) = \exp \left[ -\int_1^{r/r_\mathrm{s}} \frac {\alpha(x)} {x} dx \right]
 $$
@@ -272,9 +272,9 @@ plt.show()
 
 ## Non-thermal Support Energy
 
-Non-thermal forms of atmospheric support energy can be accounted for with the $f_\mathrm{th}$ and $f_\varphi$ parameters defined on the [Essentials](/ExpCGM/descriptions/Essentials) page. Each parameter can be a user-defined function of radius that is included in the integrals deter
+Non-thermal forms of atmospheric support energy can be accounted for with the $f_\mathrm{th}$ and $f_\varphi$ parameters defined on the [Essentials](/ExpCGM/descriptions/Essentials) page. Each parameter can be a user-defined function of radius that is included in the integrals for the cumulative mass and energy integrals.
 
-Here we define functions that simply set those parameters equal to unity:
+Here we define functions that simply set those parameters equal to unity and include a function for $\alpha_\mathrm{eff} that becomes important when $f_\mathrm$ depends on radius:
 
 ```python
 # Assume all of the atmospheric support energy is thermal
@@ -286,9 +286,15 @@ def fth(x):
 def fphi(x):
   fphi_unity = 1
   return fphi_unity
+
+# Effective shape function accounting for gradients in f_th
+def alpha_eff(x):
+  dx = 0.01 * x
+  dfth = fth(x + dx/2) - fth(x - dx/2)
+  return alpha(x) + x / fth(x) * dfth / dx
 ```
 
-## Cumulative Mass and Energy Integrals
+## Generalized Cumulative Mass and Energy Integrals
 
 When the pressure profile's shape function depends on radius, the **ExpCGM** integrals for cumulative mass and energy need to have $\alpha(x)$ inside them, unlike in the [MSU Essentials Notebook](/ExpCGM/notebooks/MSUEssentials). This cell defines functions compute those integrals based on a user-defined shape function: 
 
@@ -301,14 +307,14 @@ eps = 10**(-4)
 
 # Integrate to obtain cumulative mass profile
 def integrandI(t,x_H,f_H):
-    return alpha(t) * f_P(t) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) )
+    return alpha_eff(t) * f_P(t) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) )
 def I(x,x_H,f_H):        
     resultI, _ = integrate.quad(integrandI, eps, x, limit=50)
     return resultI
 
 # Integrate to obtain cumulative gravitational energy profile
 def integrandJphi(t,x_H,f_H):
-    return alpha(t) * f_P(t) * phi(t,x_H,f_H) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) ) 
+    return alpha_eff(t) * f_P(t) * phi(t,x_H,f_H) * t**2 / ( fth(t) * fphi(t) * vc2(t,x_H,f_H) ) 
 def Jphi(t):
     resultJphi, _ = integrate.quad(integrandJphi, eps, x, limit=50)
     return resultJphi
@@ -320,39 +326,55 @@ def Jth(x):
     resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
     return 3 / 2 * resultJth
 
+# Integrate to obtain cumulative non-thermal energy profile for effective adiabatic index of 5/3
+def integrandJnt(t):
+    gamma_nt = 5/3
+    return ( 1 - fth(t) ) / fth(t) * f_P(t) * t**2 / ( gamma_nt - 1 )
+def Jnt(x):
+    resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
+    return 3 / 2 * resultJth
+
 def F(x):
-    return (Jphi(x) + Jth(x)) / I(x)
+    return (Jphi(x) + Jth(x) + Jnt(x)) / I(x)
 ```
 
 ## Interactive Plot of $r_\mathrm{CGM} (\varepsilon_\mathrm{CGM})$
 
 ```python
-# Code to make an interactive epsCGM-xCGM plot
+# Code to make an interactive epsCGM-xCGM plot with gNFW halo, Hernquist galaxy, and fth=1
 
-# Generalized NFW pressure profile function depending on external parameters
+# Generalized NFW pressure shape function with adjustable alpha_in and alpha_out
 
-def alpha_gNFW(x,alpha_in):
-    alpha_out = 3.4
+def alpha_gNFW(x,alpha_in,alpha_out):
     alpha_tr = 1.0
     x_alpha = 2.16
     y = ( x / x_alpha )**alpha_tr
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 
+# Numerical integration of shape function to obtain a dimensionless pressure profile
+
+def integrandf_P(t,alpha_in,alpha_out):
+    return alpha_gNFW(t,alpha_in,alpha_out) / t
+
+def f_P(x,alpha_in,alpha_out):        
+    resultf_P, _ = integrate.quad(integrandf_P, 1, x, args=(alpha_in,alpha_out,), limit=50)
+    return np.exp(-resultf_P)
+
 # Set a lower limit on x=r/r_s for numerical integrations
 eps = 10**(-4)     
 
 # Integral for cumulative mass profile
-def integrandI(t,alpha_in):
-    return alpha_gNFW(t,alpha_in) * f_P(t) * t**2 / vc2(t,x_H,f_H)
+def integrandI(t,alpha_in,alpha_out):
+    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t) * t**2 / vc2(t,x_H,f_H)
 def I(x,alpha_in):        
     resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha_in,), limit=50)
     return resultI
 
 # Integral for cumulative gravitational energy profile
-def integrandJphi(t,alpha_in):
-    return alpha_gNFW(t,alpha_in) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
+def integrandJphi(t,alpha_in,alpha_out):
+    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
 def Jphi(x,alpha_in):
-    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha_in,), limit=50)
+    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha_in,alpha_out,), limit=50)
     return resultJphi
 
 # Integrate to obtain cumulative thermal energy profile
@@ -363,16 +385,16 @@ def Jth(x):
     return 3 / 2 * resultJth
 
 def F(x,alpha_in):
-    return (Jphi(x,alpha_in) + Jth(x)) / I(x,alpha_in)
+    return (Jphi(x,alpha_in,alpha_out) + Jth(x)) / I(x,alpha_in,alpha_out)
 
 # Function update_gNFW for updating the plot
 
-def update_gNFW(alpha_in=1.0):
+def update_gNFW(alpha_in=1.0,alpha_out=3.4):
 
     # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
     x_values = np.logspace(-1.5, 2, 50)
-    y1_values = [F(x,alpha_in) for x in x_values]
-    y2_values = [1/I(x,alpha_in) for x in x_values]
+    y1_values = [F(x,alpha_in,alpha_out) for x in x_values]
+    y2_values = [1/I(x,alpha_in,alpha_out) for x in x_values]
 
     # Choose a font
     gfont = {'fontname':'georgia'}
@@ -412,9 +434,54 @@ def update_gNFW(alpha_in=1.0):
 
 alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=1.5, step=0.01, value=1.0,
                            continuous_update=False)
-interact(update_gNFW, alpha_in=alpha_in_slider);
+alpha_out_slider = FloatSlider(description=r'$\alpha_\mathrm{out}$', min=1.5, max=5.0, step=0.01, value=3.4,
+                           continuous_update=False)
+interact(update_gNFW, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider);
 
 ```
 
 ![png](Notebook_1_files/Notebook_1_16_0.png)
 
+
+## Interactive Plot Showing Specific Energy Profiles
+
+```python
+def update_epsilon(alpha_in=1.0,alpha_out=3.4,x_H=0.1,f_H=1.0):
+    phi_values = [phi(x,x_H,f_H) for x in x_values] 
+    eps_th_values = [1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) for x in x_values]
+    eps_values = [phi(x,x_H,f_H) + 1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) for x in x_values]
+    x_big = 1e6
+    phi_infty = phi(x_big,x_H,f_H)
+    phi_infty_values = [phi_infty for x in x_values]
+
+    gfont = {'fontname':'georgia'}
+    plt.rcParams['font.family'] = 'georgia' 
+    plt.rcParams['font.size'] = 15 
+    plt.figure(figsize=(8, 6))
+    plt.xscale('log')
+    plt.yscale('linear')
+    plt.xlabel(r'$r / r_\mathrm{s}$', fontsize=15)
+    plt.ylabel(r'$\varepsilon / v_\varphi^2$', fontsize=15)
+
+    plt.plot(x_values, phi_infty_values, color='black', linestyle=':', label=r'$\varphi_\infty$')
+    plt.plot(x_values, phi_values, color='orange', linestyle='--', label=r'$\varphi (r)$')
+    plt.plot(x_values, eps_values, color='green', linestyle='-.', label=r'$\varepsilon (r)$')
+    plt.plot(x_values, eps_th_values, color='magenta', linestyle=':', label=r'$\varepsilon_\mathrm{th} (r)$')
+    plt.plot(x_values, y_values, color='blueviolet', linestyle='-', label=r'$\varepsilon_\mathrm{CGM}(<x)$')
+
+    # Add a legend
+    plt.legend(loc='lower right')
+
+    plt.show()
+
+alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=1.5, step=0.01, value=1.0,
+                           continuous_update=False)
+alpha_out_slider = FloatSlider(description=r'$\alpha_\mathrm{out}$', min=1.5, max=5.0, step=0.01, value=3.4,
+                           continuous_update=False)
+x_H_slider = FloatSlider(description=r'$x_\mathrm{H}$', min=0.05, max=0.5, step=0.01, value=0.1,
+                           continuous_update=False)
+f_H_slider = FloatSlider(description=r'$f_\mathrm{H}$', min=0.0, max=2.0, step=0.01, value=1.0,
+                           continuous_update=False)
+interact(update_epsilon, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider,
+                         x_H=x_H_slider, f_H=f_H_slider);
+```
