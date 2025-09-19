@@ -516,3 +516,5 @@ f_H_slider = FloatSlider(description=r'$f_\mathrm{H}$', min=0.0, max=2.0, \
 interact(update_epsilon, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider, \
                          x_H=x_H_slider, f_H=f_H_slider);
 ```
+
+![png](Notebook_1_files/Notebook_1_16_0.png)
