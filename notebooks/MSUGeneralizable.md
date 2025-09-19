@@ -341,13 +341,13 @@ def F(x):
 ## Interactive Plot of $r_\mathrm{CGM} (\varepsilon_\mathrm{CGM})$
 
 ```python
-# Code to make an interactive epsCGM-xCGM plot with gNFW halo, Hernquist galaxy, and fth=1
+# Code to make an interactive epsCGM-xCGM plot (assuming fth = fphi = 1)
 
-# Generalized NFW pressure shape function with adjustable alpha_in and alpha_out
+# Generalized NFW pressure profile function adjustable parameters (alpha_in, alpha_out)
 
 def alpha_gNFW(x,alpha_in,alpha_out):
     alpha_tr = 1.0
-    x_alpha = 2.16
+    x_alpha = 2.163
     y = ( x / x_alpha )**alpha_tr
     return alpha_in + (alpha_out - alpha_in) * y / ( 1 + y)
 
@@ -357,44 +357,46 @@ def integrandf_P(t,alpha_in,alpha_out):
     return alpha_gNFW(t,alpha_in,alpha_out) / t
 
 def f_P(x,alpha_in,alpha_out):        
-    resultf_P, _ = integrate.quad(integrandf_P, 1, x, args=(alpha_in,alpha_out,), limit=50)
+    resultf_P, _ = integrate.quad(integrandf_P, 1, x, args=(alpha_in,alpha_out,), 
+                                  limit=50)
     return np.exp(-resultf_P)
 
 # Set a lower limit on x=r/r_s for numerical integrations
 eps = 10**(-4)     
 
 # Integral for cumulative mass profile
-def integrandI(t,alpha_in,alpha_out):
-    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t) * t**2 / vc2(t,x_H,f_H)
-def I(x,alpha_in):        
-    resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha_in,), limit=50)
+def integrandI(t,alpha_in,alpha_out,x_H,f_H):
+    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t,alpha_in,alpha_out) * t**2 / vc2(t,x_H,f_H)
+def I(x,alpha_in,alpha_out,x_H,f_H):        
+    resultI, _ = integrate.quad(integrandI, eps, x, args=(alpha_in,alpha_out,x_H,f_H,), 
+                                limit=50)
     return resultI
 
 # Integral for cumulative gravitational energy profile
-def integrandJphi(t,alpha_in,alpha_out):
-    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t) * phi(t,x_H,f_H) / vc2(t,x_H,f_H) * t**2
-def Jphi(x,alpha_in):
-    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha_in,alpha_out,), limit=50)
+def integrandJphi(t,alpha_in,alpha_out,x_H,f_H):
+    return alpha_gNFW(t,alpha_in,alpha_out) * f_P(t,alpha_in,alpha_out) * phi(t,x_H,f_H) * t**2 / vc2(t,x_H,f_H) 
+def Jphi(x,alpha_in,alpha_out,x_H,f_H):
+    resultJphi, _ = integrate.quad(integrandJphi, eps, x, args=(alpha_in,alpha_out,x_H,f_H,), limit=50)
     return resultJphi
 
 # Integrate to obtain cumulative thermal energy profile
-def integrandJth(t):
-    return f_P(t) * t**2
-def Jth(x):
-    resultJth, _ = integrate.quad(integrandJth, eps, x, limit=50)
+def integrandJth(t,alpha_in,alpha_out):
+    return f_P(t,alpha_in,alpha_out) * t**2
+def Jth(x,alpha_in,alpha_out):
+    resultJth, _ = integrate.quad(integrandJth, eps, x, args=(alpha_in,alpha_out,), limit=50)
     return 3 / 2 * resultJth
 
-def F(x,alpha_in):
-    return (Jphi(x,alpha_in,alpha_out) + Jth(x)) / I(x,alpha_in,alpha_out)
+def F(x,alpha_in,alpha_out,x_H,f_H):
+    return (Jphi(x,alpha_in,alpha_out,x_H,f_H) + Jth(x,alpha_in,alpha_out)) / I(x,alpha_in,alpha_out,x_H,f_H)
 
 # Function update_gNFW for updating the plot
 
-def update_gNFW(alpha_in=1.0,alpha_out=3.4):
+def update_gNFW(alpha_in=1.0,alpha_out=3.4,x_H=0.1,f_H=1.0):
 
     # To prepare the plot, specify a range of x and determine the range of F(x) and 1/I(x)
     x_values = np.logspace(-1.5, 2, 50)
-    y1_values = [F(x,alpha_in,alpha_out) for x in x_values]
-    y2_values = [1/I(x,alpha_in,alpha_out) for x in x_values]
+    y1_values = [F(x,alpha_in,alpha_out,x_H,f_H) for x in x_values]
+    y2_values = [1/I(x,alpha_in,alpha_out,x_H,f_H) for x in x_values]
 
     # Choose a font
     gfont = {'fontname':'georgia'}
@@ -427,6 +429,7 @@ def update_gNFW(alpha_in=1.0,alpha_out=3.4):
     # Add a title and show the plot
     plt.title('Dependence of Atmospheric Radius on Mean Specific Energy', **gfont)
     plt.show()
+#    plt.savefig('epsCGM_xCGM_generalized.pdf')
 
 # Make the interactive plot
 #   continuous_update=True allows the graph to update while slider is moved
@@ -436,7 +439,12 @@ alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=
                            continuous_update=False)
 alpha_out_slider = FloatSlider(description=r'$\alpha_\mathrm{out}$', min=1.5, max=5.0, step=0.01, value=3.4,
                            continuous_update=False)
-interact(update_gNFW, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider);
+x_H_slider = FloatSlider(description=r'$x_\mathrm{H}$', min=0.05, max=0.5, step=0.01, value=0.1,
+                           continuous_update=False)
+f_H_slider = FloatSlider(description=r'$f_\mathrm{H}$', min=0.0, max=2.0, step=0.01, value=1.0,
+                           continuous_update=False)
+interact(update_gNFW, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider,
+                         x_H=x_H_slider, f_H=f_H_slider);
 
 ```
 
@@ -447,13 +455,25 @@ interact(update_gNFW, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider);
 
 ```python
 def update_epsilon(alpha_in=1.0,alpha_out=3.4,x_H=0.1,f_H=1.0):
+    
+    # To prepare the plot, specify a range of x and determine the range of F(x)
+    x_values = np.logspace(-1.5, 2, 50)
+    f_values = [F(x,alpha_in,alpha_out,x_H,f_H) for x in x_values]
+    
+    # Determine individual specific energy profiles
     phi_values = [phi(x,x_H,f_H) for x in x_values] 
-    eps_th_values = [1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) for x in x_values]
-    eps_values = [phi(x,x_H,f_H) + 1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) for x in x_values]
+    vc2_values = [vc2(x,x_H,f_H) for x in x_values] 
+    eps_th_values = [1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) \
+                    for x in x_values]
+    eps_values = [phi(x,x_H,f_H) + 1.5 * vc2(x,x_H,f_H) / alpha_gNFW(x,alpha_in,alpha_out) \
+                    for x in x_values]
+    
+    # Determine the potential at infinity, for reference
     x_big = 1e6
     phi_infty = phi(x_big,x_H,f_H)
     phi_infty_values = [phi_infty for x in x_values]
-
+    
+    # Specify plot characteristics
     gfont = {'fontname':'georgia'}
     plt.rcParams['font.family'] = 'georgia' 
     plt.rcParams['font.size'] = 15 
@@ -463,25 +483,36 @@ def update_epsilon(alpha_in=1.0,alpha_out=3.4,x_H=0.1,f_H=1.0):
     plt.xlabel(r'$r / r_\mathrm{s}$', fontsize=15)
     plt.ylabel(r'$\varepsilon / v_\varphi^2$', fontsize=15)
 
-    plt.plot(x_values, phi_infty_values, color='black', linestyle=':', label=r'$\varphi_\infty$')
-    plt.plot(x_values, phi_values, color='orange', linestyle='--', label=r'$\varphi (r)$')
-    plt.plot(x_values, eps_values, color='green', linestyle='-.', label=r'$\varepsilon (r)$')
-    plt.plot(x_values, eps_th_values, color='magenta', linestyle=':', label=r'$\varepsilon_\mathrm{th} (r)$')
-    plt.plot(x_values, y_values, color='blueviolet', linestyle='-', label=r'$\varepsilon_\mathrm{CGM}(<x)$')
+    # Plot the profiles
+    plt.plot(x_values, phi_infty_values, color='black', linestyle=':', \
+                     label=r'$\varphi_\infty$')
+    plt.plot(x_values, phi_values, color='orange', linestyle='--', \
+                     label=r'$\varphi (r)$')
+    plt.plot(x_values, vc2_values, color='red', linestyle='-.', \
+                     label=r'$v_\mathrm{c}^2 (r)$')
+    plt.plot(x_values, eps_th_values, color='magenta', linestyle=':', \
+                     label=r'$\varepsilon_\mathrm{th} (r)$')
+    plt.plot(x_values, eps_values, color='green', linestyle='-.', \
+                     label=r'$\varepsilon_\mathrm{th} + \varphi$')
+    plt.plot(x_values, f_values, color='blueviolet', linestyle='-', \
+                     label=r'$\varepsilon_\mathrm{CGM}(r)$')
 
     # Add a legend
-    plt.legend(loc='lower right')
+    plt.legend(loc='center right')
 
+    # Show the plot
     plt.show()
 
-alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=1.5, step=0.01, value=1.0,
-                           continuous_update=False)
-alpha_out_slider = FloatSlider(description=r'$\alpha_\mathrm{out}$', min=1.5, max=5.0, step=0.01, value=3.4,
-                           continuous_update=False)
-x_H_slider = FloatSlider(description=r'$x_\mathrm{H}$', min=0.05, max=0.5, step=0.01, value=0.1,
-                           continuous_update=False)
-f_H_slider = FloatSlider(description=r'$f_\mathrm{H}$', min=0.0, max=2.0, step=0.01, value=1.0,
-                           continuous_update=False)
-interact(update_epsilon, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider,
+# Specify sliders for adjustable parameters and make the plot interactive
+alpha_in_slider = FloatSlider(description=r'$\alpha_\mathrm{in}$', min=0.0, max=1.5, \
+                         step=0.01, value=1.0, continuous_update=False)
+alpha_out_slider = FloatSlider(description=r'$\alpha_\mathrm{out}$', min=1.5, max=5.0, \
+                         step=0.01, value=3.4, continuous_update=False)
+x_H_slider = FloatSlider(description=r'$x_\mathrm{H}$', min=0.05, max=0.5, \
+                         step=0.01, value=0.1, continuous_update=False)
+f_H_slider = FloatSlider(description=r'$f_\mathrm{H}$', min=0.0, max=2.0, \
+                         step=0.01, value=1.0, continuous_update=False)
+
+interact(update_epsilon, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider, \
                          x_H=x_H_slider, f_H=f_H_slider);
 ```
