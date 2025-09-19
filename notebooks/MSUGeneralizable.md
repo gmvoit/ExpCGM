@@ -448,7 +448,7 @@ interact(update_gNFW, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider,
 
 ```
 
-![png](Notebook_1_files/Notebook_1_16_0.png)
+![png](MSUGeneralizable_files/epsCGM_xCGM_sliders.png)
 
 
 ## Interactive Plot Showing Specific Energy Profiles
@@ -517,4 +517,4 @@ interact(update_epsilon, alpha_in=alpha_in_slider, alpha_out=alpha_out_slider, \
                          x_H=x_H_slider, f_H=f_H_slider);
 ```
 
-![png](Notebook_1_files/Notebook_1_16_0.png)
+![png](MSUGeneralizable_files/epsilon_profiles_sliders.png)
